@@ -10,7 +10,7 @@
 /* eslint-disable no-unused-vars */
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import express, { Application, ErrorRequestHandler, NextFunction, Request, Response } from 'express';
+import express, { Application, NextFunction, Request, Response } from 'express';
 import { globalErrorHandler, notFound } from './app/utils';
 
 const app: Application = express();
@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 
 //Testing
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
-  res.send({ message: 'Green Society Backend API Running...' });
+  res.send({ message: 'Engineers IQ server is running :(' });
 });
 
 //global error handler
