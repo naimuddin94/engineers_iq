@@ -8,7 +8,9 @@ cloudinary.config({
   api_secret: config.cloudinary_api_secret,
 });
 
-const fileUploadOnCloudinary = async (fileBuffer: Buffer) => {
+const fileUploadOnCloudinary = async (
+  fileBuffer: Buffer
+): Promise<string | null> => {
   try {
     // Use a Promise to handle the upload process
     return new Promise((resolve, reject) => {

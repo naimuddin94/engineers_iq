@@ -1,12 +1,14 @@
 import { CookieOptions } from 'express';
 import httpStatus from 'http-status';
-import { message } from '../../lib';
 import { AppResponse, asyncHandler, options } from '../../utils';
-import { AuthService } from './auth.service';
+import { UserService } from './user.service';
 
-const createUser = asyncHandler(async (req, res) => {
+const signup = asyncHandler(async (req, res) => {
+  const payload = req.body;
+  const file = req.file;
+  const { accessToken: requestAccessToken } = req.cookies;
   const { response, accessToken, refreshToken } =
-    await AuthService.saveUserIntoDB(req);
+    await UserService.saveUserIntoDB(payload, file, requestAccessToken);
 
   res
     .status(httpStatus.CREATED)
@@ -16,13 +18,13 @@ const createUser = asyncHandler(async (req, res) => {
       new AppResponse(
         httpStatus.CREATED,
         { ...response?.toObject(), accessToken, refreshToken },
-        message.user_created
+        'User saved successfully'
       )
     );
 });
 
-const login = asyncHandler(async (req, res) => {
-  const { data, accessToken, refreshToken } = await AuthService.loginUser(
+const signin = asyncHandler(async (req, res) => {
+  const { data, accessToken, refreshToken } = await UserService.loginUser(
     req.body
   );
 
@@ -34,37 +36,39 @@ const login = asyncHandler(async (req, res) => {
       new AppResponse(
         200,
         { ...data, accessToken, refreshToken },
-        message.login
+        'User signin successfully'
       )
     );
 });
 
-const logout = asyncHandler(async (req, res) => {
+const signout = asyncHandler(async (req, res) => {
   const accessToken = req.cookies?.accessToken;
 
-  await AuthService.logoutUser(accessToken);
+  await UserService.logoutUser(accessToken);
 
   res
     .status(httpStatus.OK)
     .clearCookie('accessToken')
     .clearCookie('refreshToken')
-    .json(new AppResponse(httpStatus.OK, null, message.logout));
+    .json(new AppResponse(httpStatus.OK, null, 'User signout successfully'));
 });
 
 const changePassword = asyncHandler(async (req, res) => {
   const accessToken = req.cookies?.accessToken;
   const payload = req.body;
 
-  await AuthService.changePasswordIntoDB(payload, accessToken);
+  await UserService.changePasswordIntoDB(payload, accessToken);
 
   res
     .status(httpStatus.OK)
-    .json(new AppResponse(httpStatus.OK, null, message.password_changed));
+    .json(
+      new AppResponse(httpStatus.OK, null, 'Password changed successfully')
+    );
 });
 
-export const AuthController = {
-  createUser,
-  login,
-  logout,
+export const UserController = {
+  signup,
+  signin,
+  signout,
   changePassword,
 };

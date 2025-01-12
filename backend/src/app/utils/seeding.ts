@@ -6,17 +6,17 @@ const seedingAdmin = async () => {
   try {
     //at first check if the admin exist of not
     const admin = await User.findOne({
-      role: USER_ROLE.admin,
+      role: USER_ROLE.ADMIN,
       email: config.admin_email,
     });
 
     if (!admin) {
       await User.create({
         name: 'Admin',
-        role: USER_ROLE.admin,
+        role: USER_ROLE.ADMIN,
         email: config.admin_email,
+        username: config.admin_username,
         password: config.admin_password,
-        phone: config.admin_mobile_number,
       });
     }
   } catch (error) {

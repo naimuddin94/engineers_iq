@@ -2,7 +2,6 @@ import httpStatus from 'http-status';
 import jwt from 'jsonwebtoken';
 import config from '../config';
 import { AppError } from '../utils';
-import message from './message';
 
 interface ITokenUser {
   id: string;
@@ -20,7 +19,7 @@ const verifyToken = async (token: string) => {
 
     return decoded;
   } catch {
-    throw new AppError(httpStatus.UNAUTHORIZED, message.unauthorized);
+    throw new AppError(httpStatus.UNAUTHORIZED, 'Unauthorized access!');
   }
 };
 

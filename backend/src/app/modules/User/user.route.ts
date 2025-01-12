@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { validateRequest, validateRequestCookies } from '../../middlewares';
+import { validateRequest } from '../../middlewares';
 import { UserValidation } from '../User/user.validation';
-import { AuthController } from './auth.controller';
+import { UserController } from './user.controller';
 
 const upload = multer();
 
@@ -13,28 +13,23 @@ router
   .post(
     upload.single('image'),
     validateRequest(UserValidation.createUserValidationSchema),
-    AuthController.createUser
+    UserController.signup
   );
 
 router
   .route('/signin')
   .post(
     validateRequest(UserValidation.loginUserValidationSchema),
-    AuthController.login
+    UserController.signin
   );
 
-router
-  .route('/signout')
-  .post(
-    validateRequestCookies(UserValidation.refreshTokenValidationSchema),
-    AuthController.logout
-  );
+router.route('/signout').post(UserController.signout);
 
 router
   .route('/change-password')
   .post(
     validateRequest(UserValidation.changePasswordValidationSchema),
-    AuthController.changePassword
+    UserController.changePassword
   );
 
-export const authRouters = router;
+export const UserRoutes = router;

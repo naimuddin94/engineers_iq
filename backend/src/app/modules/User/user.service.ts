@@ -1,33 +1,52 @@
-import { Request } from 'express';
 import httpStatus from 'http-status';
-import { message, verifyToken } from '../../lib';
+import { verifyToken } from '../../lib';
 import { AppError, fileUploadOnCloudinary } from '../../utils';
-import { IChangePasswordPayload, ILoginPayload } from '../User/user.interface';
+import {
+  IChangePasswordPayload,
+  ILoginPayload,
+  IUser,
+} from '../User/user.interface';
 import User from '../User/user.model';
+import { USER_ROLE } from './user.constant';
 
 // Save new user information in the database
-const saveUserIntoDB = async (req: Request) => {
-  const { accessToken: requestAccessToken } = req.cookies;
-  const userData = req.body;
+const saveUserIntoDB = async (
+  userData: Pick<
+    IUser,
+    'name' | 'email' | 'password' | 'username' | 'image' | 'role'
+  >,
 
-  if (requestAccessToken) {
-    const { role } = await verifyToken(requestAccessToken);
-    if (userData?.role && role !== 'admin') {
-      userData['role'] = 'user';
+  // eslint-disable-next-line no-undef
+  file: Express.Multer.File | undefined,
+  token: string
+) => {
+  if (token) {
+    const { role } = await verifyToken(token);
+    if (userData?.role && role !== USER_ROLE.ADMIN) {
+      userData['role'] = USER_ROLE.USER;
     }
   } else {
     if (userData?.role) {
-      userData['role'] = 'user';
+      userData['role'] = USER_ROLE.USER;
     }
   }
   const isUserExists = await User.isUserExists(userData.email);
 
   if (isUserExists) {
-    throw new AppError(httpStatus.BAD_REQUEST, message.email_exists);
+    throw new AppError(httpStatus.BAD_REQUEST, 'Email already exists!');
   }
 
-  if (req.file && req.file.buffer) {
-    userData.image = await fileUploadOnCloudinary(req.file.buffer);
+  const isUsernameExists = await User.findOne({ username: userData.username });
+
+  if (isUsernameExists) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'Username already exists!');
+  }
+
+  if (file) {
+    const imageUrl = await fileUploadOnCloudinary(file.buffer);
+    if (imageUrl) {
+      userData.image = imageUrl;
+    }
   }
 
   const result = await User.create(userData);
@@ -35,7 +54,7 @@ const saveUserIntoDB = async (req: Request) => {
   if (!result) {
     throw new AppError(
       httpStatus.INTERNAL_SERVER_ERROR,
-      message.user_creating_error
+      'Something went wrong when saving the user info'
     );
   }
 
@@ -48,23 +67,32 @@ const saveUserIntoDB = async (req: Request) => {
 
   // Convert the result to an object and remove the password field
   const response = await User.findById(result._id).select(
-    'name image address phone'
+    'name email username image'
   );
 
   return { response, accessToken, refreshToken };
 };
 
 const loginUser = async (payload: ILoginPayload) => {
-  const user = await User.isUserExists(payload.email);
+  const user = await User.findOne({
+    $or: [
+      {
+        email: payload.identity,
+      },
+      {
+        username: payload.identity,
+      },
+    ],
+  }).select('+password');
 
   if (!user) {
-    throw new AppError(httpStatus.NOT_FOUND, message.user_not_exist);
+    throw new AppError(httpStatus.NOT_FOUND, 'User does not exist!');
   }
 
   const isPasswordCorrect = await user.isPasswordCorrect(payload.password);
 
   if (!isPasswordCorrect) {
-    throw new AppError(httpStatus.NOT_ACCEPTABLE, message.invalid_credentials);
+    throw new AppError(httpStatus.NOT_ACCEPTABLE, 'Invalid credentials');
   }
 
   const accessToken = user.generateAccessToken();
@@ -90,10 +118,10 @@ const logoutUser = async (accessToken: string) => {
     const user = await User.findById(id);
 
     if (!user) {
-      throw new AppError(httpStatus.NOT_FOUND, message.user_not_exist);
+      throw new AppError(httpStatus.NOT_FOUND, 'User does not exist!');
     }
 
-    user.refreshToken = '';
+    user.refreshToken = null;
     await user.save();
   }
 
@@ -105,7 +133,7 @@ const changePasswordIntoDB = async (
   accessToken: string
 ) => {
   if (!accessToken) {
-    throw new AppError(httpStatus.UNAUTHORIZED, message.unauthorized);
+    throw new AppError(httpStatus.UNAUTHORIZED, 'Unauthorized access');
   }
 
   const { id } = await verifyToken(accessToken);
@@ -113,13 +141,13 @@ const changePasswordIntoDB = async (
   const user = await User.findById(id).select('+password');
 
   if (!user) {
-    throw new AppError(httpStatus.BAD_REQUEST, message.user_not_exist);
+    throw new AppError(httpStatus.BAD_REQUEST, 'User does not exist!');
   }
 
   const isPasswordCorrect = await user.isPasswordCorrect(payload.oldPassword);
 
   if (!isPasswordCorrect) {
-    throw new AppError(httpStatus.NOT_ACCEPTABLE, message.invalid_credentials);
+    throw new AppError(httpStatus.NOT_ACCEPTABLE, 'Invalid credentials');
   }
 
   user.password = payload.newPassword;
@@ -128,7 +156,7 @@ const changePasswordIntoDB = async (
   return null;
 };
 
-export const AuthService = {
+export const UserService = {
   saveUserIntoDB,
   loginUser,
   logoutUser,

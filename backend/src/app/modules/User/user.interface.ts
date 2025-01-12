@@ -9,7 +9,7 @@ export interface IUser {
   image: string;
   password: string;
   role: TRole;
-  refreshToken?: string;
+  refreshToken?: string | null;
   passwordChangedAt?: Date;
   followers: ObjectId[];
   following: ObjectId[];
@@ -34,7 +34,7 @@ export interface IUserModel
 }
 
 export interface ILoginPayload {
-  email: string;
+  identity: string;
   password: string;
 }
 
