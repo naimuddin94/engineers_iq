@@ -6,6 +6,7 @@ const articleSchema = new mongoose.Schema<IArticle>(
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
+      required: true,
     },
     title: {
       type: String,
@@ -37,30 +38,8 @@ const articleSchema = new mongoose.Schema<IArticle>(
     ],
     comments: [
       {
-        user: {
-          type: mongoose.Schema.Types.ObjectId,
-          required: true,
-          ref: 'User',
-        },
-        content: {
-          type: String,
-          required: true,
-        },
-        claps: [
-          {
-            type: mongoose.Schema.Types.ObjectId,
-            required: false,
-            ref: 'User',
-          },
-        ],
-        createdAt: {
-          type: Date,
-          required: true,
-        },
-        updatedAt: {
-          type: Date,
-          required: false,
-        },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment',
       },
     ],
     views: {

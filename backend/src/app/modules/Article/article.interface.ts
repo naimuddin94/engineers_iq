@@ -1,13 +1,5 @@
 import { Document, ObjectId } from 'mongoose';
 
-interface IComment {
-  user: ObjectId;
-  content: string;
-  claps: ObjectId[];
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 export interface IArticle extends Document {
   author: ObjectId;
   title: string;
@@ -16,7 +8,7 @@ export interface IArticle extends Document {
   category: string;
   topics: string[];
   claps: ObjectId[];
-  comments: IComment[];
+  comments: ObjectId[];
   views: number;
   shares: number;
   isPremium: boolean;
