@@ -18,6 +18,17 @@ const createComment = asyncHandler(async (req, res) => {
     );
 });
 
+const clapsOnComment = asyncHandler(async (req, res) => {
+  const commentId = req.params.commentId;
+  const { accessToken } = req.cookies;
+  const result = await CommentService.clapsOnComment(commentId, accessToken);
+
+  res
+    .status(status.OK)
+    .json(new AppResponse(status.OK, result, 'Claps on comment successfully'));
+});
+
 export const CommentController = {
   createComment,
+  clapsOnComment,
 };

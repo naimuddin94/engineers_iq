@@ -1,5 +1,5 @@
 import status from 'http-status';
-import mongoose from 'mongoose';
+import mongoose, { ObjectId } from 'mongoose';
 import { verifyToken } from '../../lib';
 import { AppError } from '../../utils';
 import Article from '../Article/article.model';
@@ -56,6 +56,38 @@ const saveCommentIntoDB = async (
   }
 };
 
+const clapsOnComment = async (commentId: string, token: string) => {
+  const comment = await Comment.findById(commentId);
+
+  console.log('from 62', commentId);
+
+  if (!comment) {
+    throw new AppError(status.NOT_FOUND, 'Comment not exist!');
+  }
+
+  const { id } = await verifyToken(token);
+
+  const user = await User.findById(id);
+
+  if (!user) {
+    throw new AppError(status.NOT_FOUND, 'User  not exist!');
+  }
+
+  // Toggle clap using atomic operations
+  const hasClapped = comment.claps.includes(user._id as ObjectId);
+
+  const update = hasClapped
+    ? { $pull: { claps: user._id } }
+    : { $addToSet: { claps: user._id } };
+
+  const updatedComment = await Comment.findByIdAndUpdate(commentId, update, {
+    new: true,
+  });
+
+  return updatedComment;
+};
+
 export const CommentService = {
   saveCommentIntoDB,
+  clapsOnComment,
 };
