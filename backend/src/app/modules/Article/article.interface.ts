@@ -1,10 +1,10 @@
 import { Document, ObjectId } from 'mongoose';
 
 export interface IArticle extends Document {
-  author: ObjectId;
+  author: ObjectId | unknown;
   title: string;
   textarea: string;
-  images: string[];
+  image: string;
   category: string;
   topics: string[];
   claps: ObjectId[];

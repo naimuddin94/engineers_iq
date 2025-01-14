@@ -16,9 +16,9 @@ const articleSchema = new mongoose.Schema<IArticle>(
       type: String,
       required: true,
     },
-    images: {
-      type: [String],
-      required: true,
+    image: {
+      type: String,
+      required: false,
     },
     category: {
       type: String,
