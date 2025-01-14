@@ -47,9 +47,20 @@ const getArticles = asyncHandler(async (req, res) => {
       new AppResponse(
         httpStatus.OK,
         result,
-        'Article retrieved successfully',
+        'Articles retrieved successfully',
         meta
       )
+    );
+});
+
+const getArticle = asyncHandler(async (req, res) => {
+  const articleId = req.params.articleId;
+  const result = await ArticleService.fetchArticleFromDB(articleId);
+
+  res
+    .status(httpStatus.OK)
+    .json(
+      new AppResponse(httpStatus.OK, result, 'Article retrieved successfully')
     );
 });
 
@@ -57,4 +68,5 @@ export const ArticleController = {
   createArticle,
   updateArticle,
   getArticles,
+  getArticle,
 };

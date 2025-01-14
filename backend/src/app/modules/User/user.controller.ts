@@ -1,5 +1,5 @@
 import { CookieOptions } from 'express';
-import httpStatus from 'http-status';
+import status from 'http-status';
 import { AppResponse, asyncHandler, options } from '../../utils';
 import { UserService } from './user.service';
 
@@ -11,12 +11,12 @@ const signup = asyncHandler(async (req, res) => {
     await UserService.saveUserIntoDB(payload, file, requestAccessToken);
 
   res
-    .status(httpStatus.CREATED)
+    .status(status.CREATED)
     .cookie('refreshToken', refreshToken, options as CookieOptions)
     .cookie('accessToken', accessToken, options as CookieOptions)
     .json(
       new AppResponse(
-        httpStatus.CREATED,
+        status.CREATED,
         { ...response?.toObject(), accessToken, refreshToken },
         'User saved successfully'
       )
@@ -47,10 +47,10 @@ const signout = asyncHandler(async (req, res) => {
   await UserService.logoutUser(accessToken);
 
   res
-    .status(httpStatus.OK)
+    .status(status.OK)
     .clearCookie('accessToken')
     .clearCookie('refreshToken')
-    .json(new AppResponse(httpStatus.OK, null, 'User signout successfully'));
+    .json(new AppResponse(status.OK, null, 'User signout successfully'));
 });
 
 const changePassword = asyncHandler(async (req, res) => {
@@ -60,9 +60,9 @@ const changePassword = asyncHandler(async (req, res) => {
   await UserService.changePasswordIntoDB(payload, accessToken);
 
   res
-    .status(httpStatus.OK)
+    .status(status.OK)
     .json(
-      new AppResponse(httpStatus.OK, null, 'Password changed successfully')
+      new AppResponse(status.OK, null, 'Password changed successfully')
     );
 });
 

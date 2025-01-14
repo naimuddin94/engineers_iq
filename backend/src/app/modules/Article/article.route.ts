@@ -25,6 +25,7 @@ router
     auth('USER', 'ADMIN'),
     validateRequest(ArticleValidation.updateValidationSchema),
     ArticleController.updateArticle
-  );
+  )
+  .get(ArticleController.getArticle);
 
 export const ArticleRoutes = router;

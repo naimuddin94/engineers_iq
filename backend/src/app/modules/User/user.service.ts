@@ -1,4 +1,4 @@
-import httpStatus from 'http-status';
+import status from 'http-status';
 import { verifyToken } from '../../lib';
 import { AppError, fileUploadOnCloudinary } from '../../utils';
 import {
@@ -33,13 +33,13 @@ const saveUserIntoDB = async (
   const isUserExists = await User.isUserExists(userData.email);
 
   if (isUserExists) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'Email already exists!');
+    throw new AppError(status.BAD_REQUEST, 'Email already exists!');
   }
 
   const isUsernameExists = await User.findOne({ username: userData.username });
 
   if (isUsernameExists) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'Username already exists!');
+    throw new AppError(status.BAD_REQUEST, 'Username already exists!');
   }
 
   if (file) {
@@ -53,7 +53,7 @@ const saveUserIntoDB = async (
 
   if (!result) {
     throw new AppError(
-      httpStatus.INTERNAL_SERVER_ERROR,
+      status.INTERNAL_SERVER_ERROR,
       'Something went wrong when saving the user info'
     );
   }
@@ -86,13 +86,13 @@ const loginUser = async (payload: ILoginPayload) => {
   }).select('+password');
 
   if (!user) {
-    throw new AppError(httpStatus.NOT_FOUND, 'User does not exist!');
+    throw new AppError(status.NOT_FOUND, 'User does not exist!');
   }
 
   const isPasswordCorrect = await user.isPasswordCorrect(payload.password);
 
   if (!isPasswordCorrect) {
-    throw new AppError(httpStatus.NOT_ACCEPTABLE, 'Invalid credentials');
+    throw new AppError(status.NOT_ACCEPTABLE, 'Invalid credentials');
   }
 
   const accessToken = user.generateAccessToken();
@@ -118,7 +118,7 @@ const logoutUser = async (accessToken: string) => {
     const user = await User.findById(id);
 
     if (!user) {
-      throw new AppError(httpStatus.NOT_FOUND, 'User does not exist!');
+      throw new AppError(status.NOT_FOUND, 'User does not exist!');
     }
 
     user.refreshToken = null;
@@ -133,7 +133,7 @@ const changePasswordIntoDB = async (
   accessToken: string
 ) => {
   if (!accessToken) {
-    throw new AppError(httpStatus.UNAUTHORIZED, 'Unauthorized access');
+    throw new AppError(status.UNAUTHORIZED, 'Unauthorized access');
   }
 
   const { id } = await verifyToken(accessToken);
@@ -141,13 +141,13 @@ const changePasswordIntoDB = async (
   const user = await User.findById(id).select('+password');
 
   if (!user) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'User does not exist!');
+    throw new AppError(status.BAD_REQUEST, 'User does not exist!');
   }
 
   const isPasswordCorrect = await user.isPasswordCorrect(payload.oldPassword);
 
   if (!isPasswordCorrect) {
-    throw new AppError(httpStatus.NOT_ACCEPTABLE, 'Invalid credentials');
+    throw new AppError(status.NOT_ACCEPTABLE, 'Invalid credentials');
   }
 
   user.password = payload.newPassword;

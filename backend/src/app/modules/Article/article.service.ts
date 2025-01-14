@@ -127,8 +127,22 @@ const fetchArticlesFromDB = async (query: Record<string, unknown>) => {
   };
 };
 
+// Fetch single article by article id
+const fetchArticleFromDB = async (articleId: string) => {
+  const article = await Article.findById(articleId);
+
+  if (!article) {
+    throw new AppError(status.NOT_FOUND, 'Article not exist!');
+  }
+
+  article.views++;
+  await article.save();
+  return article;
+};
+
 export const ArticleService = {
   saveArticleIntoDB,
   updateArticleInDB,
   fetchArticlesFromDB,
+  fetchArticleFromDB,
 };
