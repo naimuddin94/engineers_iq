@@ -2,10 +2,12 @@ import httpStatus from 'http-status';
 import jwt from 'jsonwebtoken';
 import config from '../config';
 import { AppError } from '../utils';
+import { ObjectId } from 'mongoose';
 
 interface ITokenUser {
-  id: string;
+  id: ObjectId;
   email: string;
+  username: string;
   role: string;
   image: string;
 }

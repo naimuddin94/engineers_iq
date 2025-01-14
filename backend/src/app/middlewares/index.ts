@@ -1,3 +1,4 @@
+import auth from './auth';
 import { validateRequest, validateRequestCookies } from './validateRequest';
 
-export { validateRequest, validateRequestCookies };
+export { auth, validateRequest, validateRequestCookies };
