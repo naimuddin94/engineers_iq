@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { validateRequest } from '../../middlewares';
+import { auth, validateRequest } from '../../middlewares';
 import { ArticleController } from './article.controller';
 import { ArticleValidation } from './article.validation';
 
@@ -10,10 +10,21 @@ const router = Router();
 
 router
   .route('/')
+  .get(ArticleController.getArticles)
   .post(
     upload.single('image'),
+    auth('USER', 'ADMIN'),
     validateRequest(ArticleValidation.createValidationSchema),
     ArticleController.createArticle
+  );
+
+router
+  .route('/:articleId')
+  .patch(
+    upload.single('image'),
+    auth('USER', 'ADMIN'),
+    validateRequest(ArticleValidation.updateValidationSchema),
+    ArticleController.updateArticle
   );
 
 export const ArticleRoutes = router;
