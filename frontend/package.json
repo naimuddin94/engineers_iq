@@ -9,8 +9,13 @@
 		"lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix"
 	},
 	"dependencies": {
+		"@hookform/resolvers": "^3.10.0",
+		"@nextui-org/avatar": "^2.2.6",
 		"@nextui-org/button": "2.2.8",
+		"@nextui-org/card": "^2.2.9",
+		"@nextui-org/chip": "^2.2.6",
 		"@nextui-org/code": "2.2.5",
+		"@nextui-org/dropdown": "^2.3.9",
 		"@nextui-org/input": "2.4.7",
 		"@nextui-org/kbd": "2.2.5",
 		"@nextui-org/link": "2.2.6",
@@ -20,16 +25,23 @@
 		"@nextui-org/switch": "2.2.7",
 		"@nextui-org/system": "2.4.5",
 		"@nextui-org/theme": "2.4.4",
+		"@nextui-org/user": "^2.2.6",
 		"@react-aria/ssr": "3.9.7",
 		"@react-aria/visually-hidden": "3.8.18",
 		"@tanstack/react-query": "^5.64.1",
+		"axios": "^1.7.9",
 		"clsx": "2.1.1",
+		"crypto-js": "^4.2.0",
 		"framer-motion": "11.13.1",
 		"intl-messageformat": "^10.5.0",
+		"lucide-react": "^0.471.1",
 		"next": "15.0.4",
 		"next-themes": "^0.4.4",
 		"react": "18.3.1",
-		"react-dom": "18.3.1"
+		"react-dom": "18.3.1",
+		"react-hook-form": "^7.54.2",
+		"sonner": "^1.7.2",
+		"zod": "^3.24.1"
 	},
 	"devDependencies": {
 		"@next/eslint-plugin-next": "15.0.4",
