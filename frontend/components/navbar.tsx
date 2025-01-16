@@ -87,12 +87,12 @@ export const Navbar = () => {
       </DropdownTrigger>
       <DropdownMenu aria-label="Profile Actions" variant="flat">
         <DropdownItem key="profile" className="h-14 gap-2">
-          <p className="font-semibold">
+          <span className="font-semibold">
             <UserName
               isPremium={currentUser?.premium}
               name={currentUser?.name}
             />
-          </p>
+          </span>
           <p className="font-semibold">{`@${currentUser?.username}`}</p>
         </DropdownItem>
         <DropdownItem key="settings" color="secondary">
@@ -108,7 +108,7 @@ export const Navbar = () => {
   );
 
   return (
-    <NextUINavbar className="z-[500000]" maxWidth="xl" position="sticky">
+    <NextUINavbar className="z-[99]" maxWidth="xl" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
@@ -121,7 +121,7 @@ export const Navbar = () => {
               <NextLink
                 className={clsx(
                   linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium",
+                  "data-[active=true]:text-primary data-[active=true]:font-medium"
                 )}
                 color="foreground"
                 href={item.href}
