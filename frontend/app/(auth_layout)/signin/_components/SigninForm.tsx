@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@nextui-org/button";
 import { motion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
@@ -11,7 +10,7 @@ import { FieldValues } from "react-hook-form";
 
 import IQForm from "@/components/form/IQForm";
 import IQInput from "@/components/form/IQInput";
-import signinValidationSchema from "@/schemas/signin.schema";
+import { AuthValidation } from "@/schemas/auth.schema";
 
 const SigninForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -27,7 +26,7 @@ const SigninForm = () => {
   return (
     <IQForm
       className="flex flex-col gap-4"
-      resolver={zodResolver(signinValidationSchema)}
+      resolver={AuthValidation.signinSchema}
       onSubmit={handleLogin}
     >
       <motion.div

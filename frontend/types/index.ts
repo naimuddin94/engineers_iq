@@ -12,7 +12,7 @@ export interface IInputProps {
   variant?: "flat" | "bordered" | "faded" | "underlined";
   size?: "sm" | "md" | "lg";
   required?: boolean;
-  type?: "text" | "password";
+  type?: "text" | "password" | "file";
   label: string;
   name: string;
   disabled?: boolean;

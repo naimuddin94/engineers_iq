@@ -3,7 +3,11 @@
     "error",
     {
       "singleQuote": true,
-      "parser": "flow"
+      "parser": "flow",
+      "usePrettierrc": false,
+      "fileInfoOptions": {
+        "withNodeModules": true
+      }
     }
   ]
 }

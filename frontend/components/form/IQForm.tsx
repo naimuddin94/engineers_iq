@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ReactNode } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 
@@ -29,7 +30,7 @@ export default function IQForm({
   }
 
   if (!!resolver) {
-    formConfig["resolver"] = resolver;
+    formConfig["resolver"] = zodResolver(resolver);
   }
 
   const methods = useForm(formConfig);
