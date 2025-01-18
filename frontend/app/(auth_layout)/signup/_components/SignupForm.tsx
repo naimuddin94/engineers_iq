@@ -28,11 +28,7 @@ const SignupForm = () => {
     const formData = new FormData();
 
     for (const key in data) {
-      if (key === "image" && data[key] instanceof File) {
-        formData.append(key, data[key]); // Append the file object
-      } else {
-        formData.append(key, data[key]);
-      }
+      formData.append(key, data[key]);
     }
 
     console.log("Form Data:", Object.fromEntries(formData.entries())); // Log the FormData object

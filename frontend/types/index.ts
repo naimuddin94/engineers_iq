@@ -19,3 +19,11 @@ export interface IInputProps {
   placeholder?: string;
   endContent?: ReactNode;
 }
+
+export interface IUser {
+  id: string;
+  email: string;
+  username: string;
+  role: string;
+  image: string;
+}
