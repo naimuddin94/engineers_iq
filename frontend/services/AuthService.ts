@@ -19,7 +19,7 @@ export const signupUser = async (userData: FieldValues) => {
 
     return data;
   } catch (error: any) {
-    throw new Error(error);
+    return error?.response?.data;
   }
 };
 
@@ -35,15 +35,22 @@ export const signinUser = async (userData: FieldValues) => {
 
     return data;
   } catch (error: any) {
-    throw new Error(error);
+    // return error?.response?.data;
+    throw new Error(error?.response?.data?.message);
   }
 };
 
 export const signout = async () => {
-  const cookieStore = await cookies();
+  try {
+    const cookieStore = await cookies();
 
-  cookieStore.delete("accessToken");
-  cookieStore.delete("refreshToken");
+    await axiosInstance.post("/auth/signout");
+
+    cookieStore.delete("accessToken");
+    cookieStore.delete("refreshToken");
+  } catch (error: any) {
+    return error?.response?.data;
+  }
 };
 
 export const getCurrentUser = async () => {

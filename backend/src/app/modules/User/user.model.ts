@@ -112,6 +112,7 @@ userSchema.methods.generateAccessToken = function () {
       name: this.name,
       role: this.role,
       image: this.image,
+      premium: this.premium,
     },
     config.jwt_access_secret!,
     {

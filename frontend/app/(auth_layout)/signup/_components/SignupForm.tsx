@@ -5,21 +5,25 @@ import { Button } from "@nextui-org/button";
 import { motion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FieldValues } from "react-hook-form";
 
 import IQFileInput from "@/components/form/IQFileInput";
 import IQForm from "@/components/form/IQForm";
 import IQInput from "@/components/form/IQInput";
 import Loading from "@/components/loading";
+import { useUser } from "@/context/user.provider";
+import { useUserSignup } from "@/hooks/auth.hook";
 import { AuthValidation } from "@/schemas/auth.schema";
-
-const isPending = false;
 
 const SignupForm = () => {
   const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+
+  const { setIsLoading: userLoading } = useUser();
+
+  const { mutate: signupFn, isPending, isSuccess } = useUserSignup();
 
   const redirect =
     typeof window !== "undefined" ? searchParams.get("redirect") : null;
@@ -31,8 +35,20 @@ const SignupForm = () => {
       formData.append(key, data[key]);
     }
 
-    console.log("Form Data:", Object.fromEntries(formData.entries())); // Log the FormData object
+    signupFn(formData);
+    userLoading(true);
   };
+
+  useEffect(() => {
+    if (!isPending && isSuccess) {
+      if (redirect) {
+        router.push(redirect);
+      } else {
+        router.push("/");
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPending, isSuccess]);
 
   return (
     <>

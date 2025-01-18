@@ -1,7 +1,6 @@
 "use client";
 
 import { Avatar } from "@nextui-org/avatar";
-import { Button } from "@nextui-org/button";
 import { Chip } from "@nextui-org/chip";
 import {
   Dropdown,
@@ -9,7 +8,6 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/dropdown";
-import { Link } from "@nextui-org/link";
 import {
   NavbarBrand,
   NavbarContent,
@@ -22,26 +20,24 @@ import { Spinner } from "@nextui-org/spinner";
 import { link as linkStyles } from "@nextui-org/theme";
 import { User } from "@nextui-org/user";
 import clsx from "clsx";
-import NextLink from "next/link";
+import Link from "next/link";
 
 import UserName from "./premium_acc_badge";
 import Logo from "./utility/Logo";
 
 import { ThemeSwitch } from "@/components/theme-switch";
 import { siteConfig } from "@/config/site";
-
-//! for development purpose
-const currentUser = {
-  name: "Md Naim Uddin",
-  image: "",
-  username: "mdnaim",
-  premium: false,
-};
-const isLoading = false;
-
-const signOut = () => {};
+import { useUser } from "@/context/user.provider";
+import { signout } from "@/services/AuthService";
 
 export const Navbar = () => {
+  const { user, isLoading, setUser } = useUser();
+
+  const handleSignout = () => {
+    signout();
+    setUser(null);
+  };
+
   const profileDropdownDesktop = (
     <Dropdown placement="bottom-start">
       <DropdownTrigger>
@@ -49,26 +45,19 @@ export const Navbar = () => {
           as="button"
           avatarProps={{
             isBordered: true,
-            src: currentUser?.image,
+            src: user?.image,
           }}
           className="transition-transform"
-          description={`@${currentUser?.username}`}
-          name={
-            <UserName
-              isPremium={currentUser?.premium}
-              name={currentUser?.name}
-            />
-          }
+          description={`@${user?.username}`}
+          name={<UserName isPremium={false} name={user?.name} />}
         />
       </DropdownTrigger>
       <DropdownMenu aria-label="User Actions" variant="flat">
         <DropdownItem key="settings" color="secondary">
-          <Link href={`/profile/${currentUser?.username}`}>
-            Profile & Analytics
-          </Link>
+          <Link href={`/profile/${user?.username}`}>Profile & Analytics</Link>
         </DropdownItem>
-        <DropdownItem key="logout" color="danger" onClick={() => signOut()}>
-          Log Out
+        <DropdownItem key="logout" color="danger" onClick={handleSignout}>
+          Signout
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>
@@ -82,26 +71,21 @@ export const Navbar = () => {
           as="button"
           className="transition-transform"
           size="sm"
-          src={currentUser?.image}
+          src={user?.image}
         />
       </DropdownTrigger>
       <DropdownMenu aria-label="Profile Actions" variant="flat">
         <DropdownItem key="profile" className="h-14 gap-2">
           <span className="font-semibold">
-            <UserName
-              isPremium={currentUser?.premium}
-              name={currentUser?.name}
-            />
+            <UserName isPremium={user?.premium} name={user?.name} />
           </span>
-          <p className="font-semibold">{`@${currentUser?.username}`}</p>
+          <p className="font-semibold">{`@${user?.username}`}</p>
         </DropdownItem>
         <DropdownItem key="settings" color="secondary">
-          <Link href={`/profile/${currentUser?.username}`}>
-            Profile & Analytics
-          </Link>
+          <Link href={`/profile/${user?.username}`}>Profile & Analytics</Link>
         </DropdownItem>
-        <DropdownItem key="logout" color="danger" onClick={() => signOut()}>
-          Log Out
+        <DropdownItem key="logout" color="danger" onClick={handleSignout}>
+          Signout
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>
@@ -111,23 +95,23 @@ export const Navbar = () => {
     <NextUINavbar className="z-[99]" maxWidth="xl" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
-          <NextLink className="flex justify-start items-center gap-1" href="/">
+          <Link className="flex justify-start items-center gap-1" href="/">
             <Logo />
-          </NextLink>
+          </Link>
         </NavbarBrand>
         <ul className="hidden lg:flex gap-4 justify-start ml-2">
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
-              <NextLink
+              <Link
                 className={clsx(
                   linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium"
+                  "data-[active=true]:text-primary data-[active=true]:font-medium",
                 )}
                 color="foreground"
                 href={item.href}
               >
                 {item.label}
-              </NextLink>
+              </Link>
             </NavbarItem>
           ))}
         </ul>
@@ -142,7 +126,7 @@ export const Navbar = () => {
           {/* {searchInput} */}
         </NavbarItem>
 
-        {currentUser && (
+        {user && (
           <Link href="/new">
             {/* <WriteIcon /> */}
             <Chip color="primary" variant="flat">
@@ -153,20 +137,23 @@ export const Navbar = () => {
 
         {isLoading ? (
           <Spinner size="sm" />
-        ) : currentUser ? (
+        ) : user ? (
           profileDropdownDesktop
         ) : (
-          <Link className="text-default-foreground" href="/auth/login">
-            <Button color="default" variant="bordered">
+          <NavbarItem>
+            <Link
+              className="border-2 border-slate-600 rounded-xl px-5 py-2"
+              href="/signin"
+            >
               Sign In
-            </Button>
-          </Link>
+            </Link>
+          </NavbarItem>
         )}
       </NavbarContent>
 
       {/* mobile */}
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-        {currentUser && (
+        {user && (
           <Link href="/new">
             <Chip color="primary" variant="flat">
               + Create
@@ -174,16 +161,19 @@ export const Navbar = () => {
           </Link>
         )}
         <ThemeSwitch />
-        {!currentUser && (
-          <Link className="text-default-foreground" href="/auth/login">
-            <Chip color="default" variant="flat">
+        {!user && (
+          <NavbarItem>
+            <Link
+              className="border-2 border-slate-600 rounded-xl px-4 py-2"
+              href="/signin"
+            >
               Sign In
-            </Chip>
-          </Link>
+            </Link>
+          </NavbarItem>
         )}
         {isLoading ? (
           <Spinner size="sm" />
-        ) : currentUser ? (
+        ) : user ? (
           profileDropdownMobile
         ) : null}
         {/* <NavbarMenuToggle /> */}
@@ -194,17 +184,15 @@ export const Navbar = () => {
         <div className="mx-4 mt-2 flex flex-col gap-2">
           {siteConfig.navItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
-              <Link color="foreground" href={item.href} size="lg">
+              <Link color="foreground" href={item.href}>
                 {item.label}
               </Link>
             </NavbarMenuItem>
           ))}
-          {!currentUser && (
-            <NavbarMenuItem>
-              <Link color="primary" href="/auth/login" size="lg">
-                Sign In
-              </Link>
-            </NavbarMenuItem>
+          {!user && (
+            <Link color="primary" href="/signin">
+              Sign In
+            </Link>
           )}
         </div>
       </NavbarMenu>

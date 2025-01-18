@@ -26,4 +26,6 @@ export interface IUser {
   username: string;
   role: string;
   image: string;
+  name: string;
+  premium: boolean;
 }

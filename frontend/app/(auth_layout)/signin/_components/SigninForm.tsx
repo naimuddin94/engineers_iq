@@ -5,11 +5,14 @@ import { Button } from "@nextui-org/button";
 import { motion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FieldValues } from "react-hook-form";
 
 import IQForm from "@/components/form/IQForm";
 import IQInput from "@/components/form/IQInput";
+import Loading from "@/components/loading";
+import { useUser } from "@/context/user.provider";
+import { useUserSignin } from "@/hooks/auth.hook";
 import { AuthValidation } from "@/schemas/auth.schema";
 
 const SigninForm = () => {
@@ -19,60 +22,96 @@ const SigninForm = () => {
 
   const redirect = searchParams.get("redirect");
 
+  const { setIsLoading: userLoading } = useUser();
+
+  // Extract data from the custom hook
+  const {
+    mutate: signinFn,
+    isPending,
+    isSuccess,
+    error,
+    reset,
+  } = useUserSignin();
+
   const handleLogin = async (data: FieldValues) => {
-    console.log(data);
+    reset();
+    signinFn(data);
+    userLoading(true);
   };
 
+ useEffect(() => {
+   console.log("isSuccess:", isSuccess, "error:", error);
+   if (isSuccess && !error) {
+     console.log("Login successful, redirecting...");
+     userLoading(false); // Reset loading state
+     router.push(redirect || "/"); // Redirect only if no error
+   }
+ }, [isSuccess, error]);
+
+
   return (
-    <IQForm
-      className="flex flex-col gap-4"
-      resolver={AuthValidation.signinSchema}
-      onSubmit={handleLogin}
-    >
-      <motion.div
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0 }}
-        initial={{ opacity: 0, y: -90 }}
-        transition={{ delay: 0.2 }}
+    <>
+      {isPending && <Loading />}
+      <IQForm
+        className="flex flex-col gap-4"
+        resolver={AuthValidation.signinSchema}
+        onSubmit={handleLogin}
       >
-        <IQInput required label="Email or Username" name="identity" />
-      </motion.div>
-      <motion.div
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0 }}
-        initial={{ opacity: 0, y: -70 }}
-        transition={{ delay: 0.1 }}
-      >
-        <IQInput
-          required
-          endContent={
-            showPassword ? (
-              <EyeOff
-                className="cursor-pointer absolute right-3 top-4 opacity-70"
-                onClick={() => setShowPassword(false)}
-              />
-            ) : (
-              <Eye
-                className="cursor-pointer absolute right-3 top-4 opacity-70"
-                onClick={() => setShowPassword(true)}
-              />
-            )
-          }
-          label="Password"
-          name="password"
-          type={showPassword ? "text" : "password"}
-        />
-      </motion.div>
-      <motion.div
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0 }}
-        initial={{ opacity: 0, y: -50 }}
-      >
-        <Button className="w-full" size="lg" type="submit">
-          Sign In
-        </Button>
-      </motion.div>
-    </IQForm>
+        <motion.div
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          initial={{ opacity: 0, y: -90 }}
+          transition={{ delay: 0.2 }}
+        >
+          <IQInput required label="Email or Username" name="identity" />
+        </motion.div>
+        <motion.div
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          initial={{ opacity: 0, y: -70 }}
+          transition={{ delay: 0.1 }}
+        >
+          <IQInput
+            required
+            endContent={
+              showPassword ? (
+                <EyeOff
+                  className="cursor-pointer absolute right-3 top-4 opacity-70"
+                  onClick={() => setShowPassword(false)}
+                />
+              ) : (
+                <Eye
+                  className="cursor-pointer absolute right-3 top-4 opacity-70"
+                  onClick={() => setShowPassword(true)}
+                />
+              )
+            }
+            label="Password"
+            name="password"
+            type={showPassword ? "text" : "password"}
+          />
+        </motion.div>
+        <motion.div
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          initial={{ opacity: 0, y: -50 }}
+        >
+          <Button className="w-full" size="lg" type="submit">
+            Sign In
+          </Button>
+        </motion.div>
+        {error && (
+          <motion.div
+            animate={{ opacity: 1, y: 0 }}
+            className="text-red-500 mt-4 text-center"
+            exit={{ opacity: 0 }}
+            initial={{ opacity: 0, y: -30 }}
+          >
+            {error.message || "Login failed. Please try again."}
+          </motion.div>
+        )}
+      </IQForm>
+    </>
   );
 };
 

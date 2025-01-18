@@ -3,15 +3,11 @@ import { useFormContext, useWatch } from "react-hook-form";
 
 import { IInputProps } from "@/types";
 
-interface IProps extends IInputProps {
-  type?: string;
-}
-
 export default function IQTextarea({
   name,
   label,
   variant = "bordered",
-}: IProps) {
+}: IInputProps) {
   const { register } = useFormContext();
 
   const currentValue = useWatch({ name });
