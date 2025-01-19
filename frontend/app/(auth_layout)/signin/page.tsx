@@ -27,7 +27,7 @@ export default function SigninPage() {
             <p className="text-sm text-default-500">
               Don&apos;t have an account?{" "}
               <Link className="text-blue-500" href="/signup">
-                Sign up
+                Signup
               </Link>
             </p>
           </CardFooter>

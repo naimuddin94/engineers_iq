@@ -39,15 +39,12 @@ const SigninForm = () => {
     userLoading(true);
   };
 
- useEffect(() => {
-   console.log("isSuccess:", isSuccess, "error:", error);
-   if (isSuccess && !error) {
-     console.log("Login successful, redirecting...");
-     userLoading(false); // Reset loading state
-     router.push(redirect || "/"); // Redirect only if no error
-   }
- }, [isSuccess, error]);
-
+  useEffect(() => {
+    if (isSuccess && !error) {
+      userLoading(false);
+      router.push(redirect || "/");
+    }
+  }, [isSuccess, error]);
 
   return (
     <>
@@ -100,16 +97,6 @@ const SigninForm = () => {
             Sign In
           </Button>
         </motion.div>
-        {error && (
-          <motion.div
-            animate={{ opacity: 1, y: 0 }}
-            className="text-red-500 mt-4 text-center"
-            exit={{ opacity: 0 }}
-            initial={{ opacity: 0, y: -30 }}
-          >
-            {error.message || "Login failed. Please try again."}
-          </motion.div>
-        )}
       </IQForm>
     </>
   );

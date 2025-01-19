@@ -19,7 +19,7 @@ export const signupUser = async (userData: FieldValues) => {
 
     return data;
   } catch (error: any) {
-    return error?.response?.data;
+    throw new Error(error?.response?.data?.message);
   }
 };
 
@@ -35,7 +35,6 @@ export const signinUser = async (userData: FieldValues) => {
 
     return data;
   } catch (error: any) {
-    // return error?.response?.data;
     throw new Error(error?.response?.data?.message);
   }
 };
@@ -49,7 +48,7 @@ export const signout = async () => {
     cookieStore.delete("accessToken");
     cookieStore.delete("refreshToken");
   } catch (error: any) {
-    return error?.response?.data;
+    throw new Error(error?.response?.data?.message);
   }
 };
 

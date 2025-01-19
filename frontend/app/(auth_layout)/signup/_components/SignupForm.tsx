@@ -23,7 +23,7 @@ const SignupForm = () => {
 
   const { setIsLoading: userLoading } = useUser();
 
-  const { mutate: signupFn, isPending, isSuccess } = useUserSignup();
+  const { mutate: signupFn, isPending, isSuccess, error } = useUserSignup();
 
   const redirect =
     typeof window !== "undefined" ? searchParams.get("redirect") : null;
@@ -40,15 +40,14 @@ const SignupForm = () => {
   };
 
   useEffect(() => {
-    if (!isPending && isSuccess) {
+    if (!error && isSuccess) {
       if (redirect) {
         router.push(redirect);
       } else {
         router.push("/");
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPending, isSuccess]);
+  }, [isSuccess]);
 
   return (
     <>
