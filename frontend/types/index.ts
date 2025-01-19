@@ -18,6 +18,7 @@ export interface IInputProps {
   disabled?: boolean;
   placeholder?: string;
   endContent?: ReactNode;
+  defaultValue?: string | null;
 }
 
 export interface IUser {
