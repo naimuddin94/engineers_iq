@@ -13,7 +13,6 @@ import {
   NavbarContent,
   NavbarItem,
   NavbarMenu,
-  NavbarMenuItem,
   Navbar as NextUINavbar,
 } from "@nextui-org/navbar";
 import { Spinner } from "@nextui-org/spinner";
@@ -101,18 +100,17 @@ export const Navbar = () => {
         </NavbarBrand>
         <ul className="hidden lg:flex gap-4 justify-start ml-2">
           {siteConfig.navItems.map((item) => (
-            <NavbarItem key={item.href}>
-              <Link
-                className={clsx(
-                  linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium",
-                )}
-                color="foreground"
-                href={item.href}
-              >
-                {item.label}
-              </Link>
-            </NavbarItem>
+            <Link
+              key={item.href}
+              className={clsx(
+                linkStyles({ color: "foreground" }),
+                "data-[active=true]:text-primary data-[active=true]:font-medium",
+              )}
+              color="foreground"
+              href={item.href}
+            >
+              {item.label}
+            </Link>
           ))}
         </ul>
       </NavbarContent>
@@ -140,14 +138,12 @@ export const Navbar = () => {
         ) : user ? (
           profileDropdownDesktop
         ) : (
-          <NavbarItem>
-            <Link
-              className="border-2 border-slate-600 rounded-xl px-5 py-2"
-              href="/signin"
-            >
-              Sign In
-            </Link>
-          </NavbarItem>
+          <Link
+            className="border-2 border-slate-600 rounded-xl px-5 py-2"
+            href="/signin"
+          >
+            Sign In
+          </Link>
         )}
       </NavbarContent>
 
@@ -162,14 +158,12 @@ export const Navbar = () => {
         )}
         <ThemeSwitch />
         {!user && (
-          <NavbarItem>
-            <Link
-              className="border-2 border-slate-600 rounded-xl px-4 py-2"
-              href="/signin"
-            >
-              Sign In
-            </Link>
-          </NavbarItem>
+          <Link
+            className="border-2 border-slate-600 rounded-xl px-4 py-2"
+            href="/signin"
+          >
+            Sign In
+          </Link>
         )}
         {isLoading ? (
           <Spinner size="sm" />
@@ -183,11 +177,9 @@ export const Navbar = () => {
         {/* {searchInput} */}
         <div className="mx-4 mt-2 flex flex-col gap-2">
           {siteConfig.navItems.map((item, index) => (
-            <NavbarMenuItem key={`${item}-${index}`}>
-              <Link color="foreground" href={item.href}>
-                {item.label}
-              </Link>
-            </NavbarMenuItem>
+            <Link key={`${item}-${index}`} color="foreground" href={item.href}>
+              {item.label}
+            </Link>
           ))}
           {!user && (
             <Link color="primary" href="/signin">

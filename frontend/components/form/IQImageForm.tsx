@@ -91,7 +91,7 @@ export default function IQImageForm({
               Upload Image
             </Button>
             {errors[name] && (
-              <span className="text-primary text-xs">
+              <span className="text-[#F31260] text-xs">
                 {errors[name].message as string}
               </span>
             )}

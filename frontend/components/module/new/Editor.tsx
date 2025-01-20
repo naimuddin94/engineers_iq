@@ -1,13 +1,15 @@
 /* eslint-disable prettier/prettier */
+"use client";
 
 import { Card, CardHeader } from "@nextui-org/card";
 import { Color } from "@tiptap/extension-color";
+import Link from "@tiptap/extension-link";
 import ListItem from "@tiptap/extension-list-item";
 import TextAlign from "@tiptap/extension-text-align";
 import TextStyle from "@tiptap/extension-text-style";
 import { EditorProvider } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Link from "@tiptap/extension-link";
+import { Dispatch, SetStateAction } from "react";
 
 import MenuBar from "./Menubar";
 
@@ -102,7 +104,12 @@ const extensions = [
   }),
 ];
 
-export default function Editor({ content }: { content: string }) {
+interface IProps {
+  content: string;
+  setContent: Dispatch<SetStateAction<string>>;
+}
+
+export default function Editor({ content, setContent }: IProps) {
   return (
     <Card className="p-5">
       <CardHeader className="flex flex-col items-start">
@@ -118,11 +125,12 @@ export default function Editor({ content }: { content: string }) {
         editorProps={{
           attributes: {
             class:
-              "border-2 p-3 rounded-xl border-foreground-200 min-h-72 focus:outline-none focus:border-[#71717A]",
+              "border-2 p-3 rounded-xl border-foreground-200 min-h-72 focus:outline-none dark:focus:border-gray-300 focus:border-gray-700",
           },
         }}
         extensions={extensions}
         slotBefore={<MenuBar />}
+        onUpdate={({ editor }) => setContent(editor.getHTML())}
       />
     </Card>
   );
