@@ -65,9 +65,9 @@
 
   /* Code and preformatted text styles */
   code {
-    background-color: rgb(146, 0, 146);
+    background-color: yellow;
     border-radius: 0.4rem;
-    color: var(--black);
+    color: black;
     font-size: 0.85rem;
     padding: 0.25em 0.3em;
   }
@@ -98,5 +98,17 @@
     border: none;
     border-top: 1px solid rgb(95, 94, 94);
     margin: 2rem 0;
+  }
+
+  /* Link styles */
+  a {
+    color: #1a73e8;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 500;
+
+    &:hover {
+      color: #0c5dbf;
+    }
   }
 }
