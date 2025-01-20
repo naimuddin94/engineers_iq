@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export const topicsData = [
     { key: "design_patterns", label: "Design Patterns" },
     { key: "distributed_systems", label: "Distributed Systems" },

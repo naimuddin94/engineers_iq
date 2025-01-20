@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export const categoriesData = [
     { key: "software_development", label: "Software Development" },
     { key: "web_development", label: "Web Development" },

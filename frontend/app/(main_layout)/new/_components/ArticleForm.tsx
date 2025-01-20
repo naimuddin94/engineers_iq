@@ -9,7 +9,8 @@ import ArticleInfoForm from "./ArticleInfoForm";
 
 import IQForm from "@/components/form/IQForm";
 import IQImageForm from "@/components/form/IQImageForm";
-import Editor from "@/components/module/new/Editor"; // Import the Quill Snow theme
+import Editor from "@/components/module/new/Editor";
+// Import the Quill Snow theme
 
 export default function ArticleForm() {
   const [content, setContent] = useState(
@@ -33,7 +34,9 @@ export default function ArticleForm() {
         </div>
         <Editor content={content} />
         <div className="flex justify-end mt-5">
-          <Button size="lg" variant="faded">Save Article</Button>
+          <Button size="lg" variant="faded">
+            Save Article
+          </Button>
         </div>
       </IQForm>
     </>
