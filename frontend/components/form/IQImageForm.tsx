@@ -26,10 +26,12 @@ export default function IQImageForm({
   );
 
   useEffect(() => {
-    if (defaultValue) {
-      setPreviewUrl(defaultValue);
-    } else {
-      setPreviewUrl(null);
+    if (!errors) {
+      if (defaultValue) {
+        setPreviewUrl(defaultValue);
+      } else {
+        setPreviewUrl(null);
+      }
     }
   }, [isSubmitSuccessful]);
 

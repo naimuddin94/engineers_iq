@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 /* eslint-disable prettier/prettier */
 "use client";
 
@@ -7,11 +8,16 @@ import Link from "@tiptap/extension-link";
 import ListItem from "@tiptap/extension-list-item";
 import TextAlign from "@tiptap/extension-text-align";
 import TextStyle from "@tiptap/extension-text-style";
-import { EditorProvider } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import dynamic from "next/dynamic";
 import { Dispatch, SetStateAction } from "react";
 
-import MenuBar from "./Menubar";
+const EditorProvider = dynamic(
+  () => import("@tiptap/react").then((mod) => mod.EditorProvider),
+  { ssr: false },
+);
+
+const MenuBar = dynamic(() => import("./Menubar"), { ssr: false });
 
 const extensions = [
   Color.configure({ types: [TextStyle.name, ListItem.name] }),

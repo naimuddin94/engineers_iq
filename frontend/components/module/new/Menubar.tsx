@@ -1,4 +1,6 @@
 /* eslint-disable prettier/prettier */
+"use client";
+
 import {
   Modal,
   ModalBody,
