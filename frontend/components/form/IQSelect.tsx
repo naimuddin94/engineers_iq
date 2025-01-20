@@ -8,6 +8,7 @@ interface IProps extends IInputProps {
     key: string;
     label: string;
   }[];
+  multiple?: "multiple";
 }
 
 export default function IQSelect({
@@ -16,6 +17,7 @@ export default function IQSelect({
   label,
   variant = "bordered",
   disabled,
+  multiple,
 }: IProps) {
   const { register } = useFormContext();
 
@@ -25,6 +27,7 @@ export default function IQSelect({
       className="min-w-full sm:min-w-[225px]"
       isDisabled={disabled}
       label={label}
+      selectionMode={multiple}
       variant={variant}
     >
       {options.map((option) => (
