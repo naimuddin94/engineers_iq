@@ -7,11 +7,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { SearchIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
+import { SidebarSection } from "@/components/module/home/sidebar_section";
 import Container from "@/components/shared/Container";
 import { categoriesData } from "@/const/article/categories";
-import useDebounce from "@/hooks/debounce";
-import { SidebarSection } from "@/components/module/home/sidebar_section";
 import { topicsData } from "@/const/article/topics";
+import { useGetArticles } from "@/hooks/article.hook";
+import useDebounce from "@/hooks/debounce";
 
 const fadeInUp = {
   initial: { opacity: 0, y: -20 },
@@ -31,9 +32,16 @@ export default function Home() {
   const [isFocused, setIsFocused] = useState(false);
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
+  const { data, isLoading, error, refetch } = useGetArticles({
+    searchTerm: debouncedSearchTerm,
+    category: selectedCategory,
+  });
+
+  console.log(data);
+
   useEffect(() => {
-    setSearchTerm(debouncedSearchTerm);
-  }, [debouncedSearchTerm]);
+    refetch();
+  }, [searchTerm, selectedCategory]);
 
   return (
     <Container>
@@ -81,19 +89,36 @@ export default function Home() {
                   className="mb-6 flex space-x-2 overflow-x-auto"
                   variants={fadeInUp}
                 >
-                  <AnimatePresence>
-                    <motion.div key="latest" variants={fadeInUp}>
+                  <AnimatePresence mode="sync">
+                    <motion.div
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 50 }}
+                      initial={{ opacity: 0, x: -50 }}
+                      transition={{
+                        duration: 0.3,
+                        delay: 0.2,
+                      }}
+                    >
                       <Chip
                         className="hover:cursor-pointer"
                         color={!selectedCategory ? "primary" : "default"}
                         variant="flat"
                         onClick={() => setCategory("")}
                       >
-                        For You
+                        For you
                       </Chip>
                     </motion.div>
                     {categoriesData.slice(0, 5).map((category, indx) => (
-                      <motion.div key={indx} variants={fadeInUp}>
+                      <motion.div
+                        key={indx}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 50 }}
+                        initial={{ opacity: 0, x: -50 }}
+                        transition={{
+                          duration: 0.3,
+                          delay: (indx + 1) * 0.2,
+                        }}
+                      >
                         <Chip
                           className="hover:cursor-pointer"
                           color={
