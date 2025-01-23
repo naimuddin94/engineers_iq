@@ -5,7 +5,7 @@
 import { FieldValues } from "react-hook-form";
 
 import axiosInstance from "@/lib/axiosInstance";
-import { IFilterOptions } from "@/types";
+import { IArticle, IFilterOptions, IResponseWithMetadata } from "@/types";
 
 export const createArticle = async (articleData: FieldValues) => {
   try {
@@ -17,13 +17,15 @@ export const createArticle = async (articleData: FieldValues) => {
   }
 };
 
-export const fetchArticles = async (params: IFilterOptions) => {
+export const fetchArticles = async (
+  params: IFilterOptions,
+): Promise<IResponseWithMetadata<IArticle[]>> => {
   try {
     // Build query string dynamically
     const queryParams = new URLSearchParams(
       Object.entries(params).filter(([_, value]) => value !== undefined),
     ).toString();
-    const { data } = await axiosInstance.get("/articles");
+    const { data } = await axiosInstance.get(`/articles?${queryParams}`);
 
     return data;
   } catch (error: any) {

@@ -5,13 +5,13 @@ import { Input } from "@nextui-org/input";
 import { Kbd } from "@nextui-org/kbd";
 import { AnimatePresence, motion } from "framer-motion";
 import { SearchIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
+import ArticlesView from "@/components/module/home/ArticlesVeiw";
 import { SidebarSection } from "@/components/module/home/sidebar_section";
 import Container from "@/components/shared/Container";
 import { categoriesData } from "@/const/article/categories";
 import { topicsData } from "@/const/article/topics";
-import { useGetArticles } from "@/hooks/article.hook";
 import useDebounce from "@/hooks/debounce";
 
 const fadeInUp = {
@@ -32,16 +32,9 @@ export default function Home() {
   const [isFocused, setIsFocused] = useState(false);
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-  const { data, isLoading, error, refetch } = useGetArticles({
-    searchTerm: debouncedSearchTerm,
-    category: selectedCategory,
-  });
-
-  console.log(data);
-
-  useEffect(() => {
-    refetch();
-  }, [searchTerm, selectedCategory]);
+  // useEffect(() => {
+  //   refetch();
+  // }, [searchTerm, selectedCategory]);
 
   return (
     <Container>
@@ -141,6 +134,8 @@ export default function Home() {
                     ))}
                   </AnimatePresence>
                 </motion.div>
+
+                <ArticlesView />
               </motion.div>
 
               <motion.div className="w-full lg:w-1/3" variants={fadeInUp}>

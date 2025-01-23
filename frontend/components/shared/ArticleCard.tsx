@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Avatar } from "@nextui-org/avatar";
 import { Card, CardBody } from "@nextui-org/card";
-import { Chip } from "@nextui-org/chip";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -42,22 +41,24 @@ export default function ArticleCard({ article }: IProps) {
                   {calculateReadTime(article.textarea)} min read
                 </span>
                 ·<span className="text-small ">{article.views} views</span>
-                {article.topics.map((tag, index) => (
+                {/* {article.topics.map((tag, index) => (
                   <Chip key={index} size="sm" variant="flat">
                     {tag}
                   </Chip>
-                ))}
+                ))} */}
               </div>
             </div>
-            <div className="w-full md:w-80 h-40 md:h-24 mb-4 md:mb-0">
-              <Image
-                alt={article.title}
-                className="w-full h-full object-cover rounded"
-                height={100}
-                src={article.image}
-                width={100}
-              />
-            </div>
+            {article?.image && (
+              <div className="w-full md:w-80 h-40 md:h-24 mb-4 md:mb-0">
+                <Image
+                  alt={article.title}
+                  className="w-full h-full object-cover rounded"
+                  height={100}
+                  src={article?.image}
+                  width={100}
+                />
+              </div>
+            )}
           </div>
         </Link>
       </CardBody>
