@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 "use client";
 
 import { Avatar } from "@nextui-org/avatar";
@@ -11,7 +12,6 @@ import {
 import {
   NavbarBrand,
   NavbarContent,
-  NavbarItem,
   NavbarMenu,
   Navbar as NextUINavbar,
 } from "@nextui-org/navbar";
@@ -29,7 +29,7 @@ import { siteConfig } from "@/config/site";
 import { useUser } from "@/context/user.provider";
 import { signout } from "@/services/AuthService";
 
-export const Navbar = () => {
+export default function Navbar() {
   const { user, isLoading, setUser } = useUser();
 
   const handleSignout = () => {
@@ -37,23 +37,23 @@ export const Navbar = () => {
     setUser(null);
   };
 
-  const profileDropdownDesktop = (
+  const profileDropdownDesktop = user && (
     <Dropdown placement="bottom-start">
       <DropdownTrigger>
         <User
           as="button"
           avatarProps={{
             isBordered: true,
-            src: user?.image,
+            src: user.image || "",
           }}
           className="transition-transform"
-          description={`@${user?.username}`}
-          name={<UserName isPremium={false} name={user?.name} />}
+          description={`@${user.username}`}
+          name={<UserName isPremium={false} name={user.name || "Guest"} />}
         />
       </DropdownTrigger>
       <DropdownMenu aria-label="User Actions" variant="flat">
         <DropdownItem key="settings" color="secondary">
-          <Link href={`/profile/${user?.username}`}>Profile & Analytics</Link>
+          <Link href={`/profile/${user.username}`}>Profile & Analytics</Link>
         </DropdownItem>
         <DropdownItem key="logout" color="danger" onClick={handleSignout}>
           Signout
@@ -62,7 +62,7 @@ export const Navbar = () => {
     </Dropdown>
   );
 
-  const profileDropdownMobile = (
+  const profileDropdownMobile = user && (
     <Dropdown placement="bottom-end">
       <DropdownTrigger>
         <Avatar
@@ -70,18 +70,18 @@ export const Navbar = () => {
           as="button"
           className="transition-transform"
           size="sm"
-          src={user?.image}
+          src={user.image || ""}
         />
       </DropdownTrigger>
       <DropdownMenu aria-label="Profile Actions" variant="flat">
         <DropdownItem key="profile" className="h-14 gap-2">
           <span className="font-semibold">
-            <UserName isPremium={user?.premium} name={user?.name} />
+            <UserName isPremium={user.premium} name={user.name || "Guest"} />
           </span>
-          <p className="font-semibold">{`@${user?.username}`}</p>
+          <p className="font-semibold">{`@${user.username}`}</p>
         </DropdownItem>
         <DropdownItem key="settings" color="secondary">
-          <Link href={`/profile/${user?.username}`}>Profile & Analytics</Link>
+          <Link href={`/profile/${user.username}`}>Profile & Analytics</Link>
         </DropdownItem>
         <DropdownItem key="logout" color="danger" onClick={handleSignout}>
           Signout
@@ -92,6 +92,7 @@ export const Navbar = () => {
 
   return (
     <NextUINavbar className="z-[99]" maxWidth="xl" position="sticky">
+      {/* Left Content */}
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <Link className="flex justify-start items-center gap-1" href="/">
@@ -115,15 +116,11 @@ export const Navbar = () => {
         </ul>
       </NavbarContent>
 
+      {/* Right Content */}
       <NavbarContent
         className="hidden sm:flex basis-1/5 sm:basis-full"
         justify="end"
       >
-        <ThemeSwitch />
-        <NavbarItem className="hidden lg:flex">
-          {/* {searchInput} */}
-        </NavbarItem>
-
         {user && (
           <Link href="/new">
             {/* <WriteIcon /> */}
@@ -132,7 +129,7 @@ export const Navbar = () => {
             </Chip>
           </Link>
         )}
-
+        <ThemeSwitch />
         {isLoading ? (
           <Spinner size="sm" />
         ) : user ? (
@@ -147,17 +144,14 @@ export const Navbar = () => {
         )}
       </NavbarContent>
 
-      {/* mobile */}
+      {/* Mobile Content */}
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-        {user && (
-          <Link href="/new">
-            <Chip color="primary" variant="flat">
-              + Create
-            </Chip>
-          </Link>
-        )}
         <ThemeSwitch />
-        {!user && (
+        {isLoading ? (
+          <Spinner size="sm" />
+        ) : user ? (
+          profileDropdownMobile
+        ) : (
           <Link
             className="border-2 border-slate-600 rounded-xl px-4 py-2"
             href="/signin"
@@ -165,16 +159,10 @@ export const Navbar = () => {
             Sign In
           </Link>
         )}
-        {isLoading ? (
-          <Spinner size="sm" />
-        ) : user ? (
-          profileDropdownMobile
-        ) : null}
-        {/* <NavbarMenuToggle /> */}
       </NavbarContent>
 
+      {/* Mobile Menu */}
       <NavbarMenu>
-        {/* {searchInput} */}
         <div className="mx-4 mt-2 flex flex-col gap-2">
           {siteConfig.navItems.map((item, index) => (
             <Link key={`${item}-${index}`} color="foreground" href={item.href}>
@@ -190,4 +178,4 @@ export const Navbar = () => {
       </NavbarMenu>
     </NextUINavbar>
   );
-};
+}

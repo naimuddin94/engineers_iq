@@ -1,8 +1,8 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 
-import { AnotherNavbar } from "@/components/AnotherNavabar";
 import Footer from "@/components/footer";
+import Navbar from "@/components/navbar";
 import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
@@ -27,7 +27,7 @@ export default function RootLayout({
 }) {
   return (
     <>
-      <AnotherNavbar />
+      <Navbar />
       {children}
       <Footer />
     </>

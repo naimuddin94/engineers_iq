@@ -30,3 +30,29 @@ export interface IUser {
   name: string;
   premium: boolean;
 }
+
+export interface IFilterOptions {
+  page?: string;
+  limit?: string;
+  searchTerm?: string;
+  fields?: string;
+  sort?: string;
+  category?: string;
+}
+
+export interface IMeta {
+  page: number;
+  limit: number;
+  total: number;
+  totalPage: number;
+}
+
+export interface IResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+}
+
+export interface IResponseWithMetadata<T> extends IResponse<T> {
+  meta: IMeta;
+}
