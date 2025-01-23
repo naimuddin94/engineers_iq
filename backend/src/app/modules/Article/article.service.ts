@@ -109,6 +109,10 @@ const fetchArticlesFromDB = async (query: Record<string, unknown>) => {
         select: 'user content claps createdAt updatedAt',
         populate: { path: 'user', select: 'name username image' },
       },
+      {
+        path: 'author',
+        select: 'name username image email premium',
+      },
     ]),
     query
   )

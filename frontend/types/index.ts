@@ -56,3 +56,39 @@ export interface IResponse<T> {
 export interface IResponseWithMetadata<T> extends IResponse<T> {
   meta: IMeta;
 }
+
+export interface IArticle {
+  _id: string;
+  author: IUser;
+  title: string;
+  textarea: string;
+  image: string;
+  category: string;
+  topics: string[];
+  claps: string[];
+  comments: IComment[];
+  views: number;
+  shares: number;
+  isPremium: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IComment {
+  _id: string;
+  user: IUser;
+  content: string;
+  claps: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IUser {
+  _id: string;
+  name: string;
+  email: string;
+  username: string;
+  image: string;
+  role: string;
+  premium: boolean;
+}
