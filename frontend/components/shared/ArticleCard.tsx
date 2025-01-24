@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Avatar } from "@nextui-org/avatar";
 import { Card, CardBody } from "@nextui-org/card";
+import { Chip } from "@nextui-org/chip";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -16,7 +17,7 @@ interface IProps {
 
 export default function ArticleCard({ article }: IProps) {
   return (
-    <Card className="mb-6 px-2 relative overflow-hidden">
+    <Card className="mb-6 px-2 relative overflow-hidden group">
       <CardBody className={article.isPremium ? "blur-sm" : ""}>
         <Link
           className="flex items-center mb-2 hover:underline"
@@ -28,7 +29,7 @@ export default function ArticleCard({ article }: IProps) {
             name={article.author.name}
           />
         </Link>
-        <Link href={`/articles/${article._id}`}>
+        <Link href={`/article/${article._id}`}>
           <div className="flex flex-col md:flex-row justify-between">
             <div className="flex-grow pr-0 md:pr-4">
               <h2 className="text-xl font-bold mb-2">{article.title}</h2>
@@ -41,18 +42,18 @@ export default function ArticleCard({ article }: IProps) {
                   {calculateReadTime(article.textarea)} min read
                 </span>
                 ·<span className="text-small ">{article.views} views</span>
-                {/* {article.topics.map((tag, index) => (
+                {article.topics.map((tag, index) => (
                   <Chip key={index} size="sm" variant="flat">
                     {tag}
                   </Chip>
-                ))} */}
+                ))}
               </div>
             </div>
             {article?.image && (
-              <div className="w-full md:w-80 h-40 md:h-24 mb-4 md:mb-0">
+              <div className="w-full md:w-80 h-40 md:h-32 mb-4 md:mb-0">
                 <Image
                   alt={article.title}
-                  className="w-full h-full object-cover rounded"
+                  className="w-full h-full object-cover rounded group-hover:scale-105 duration-400"
                   height={100}
                   src={article?.image}
                   width={100}
