@@ -14,6 +14,7 @@
 		"@heroui/input": "^2.4.9",
 		"@heroui/modal": "^2.2.8",
 		"@heroui/select": "^2.4.10",
+		"@heroui/skeleton": "^2.2.6",
 		"@hookform/resolvers": "^3.10.0",
 		"@nextui-org/avatar": "^2.2.6",
 		"@nextui-org/button": "2.2.8",

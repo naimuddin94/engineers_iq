@@ -32,10 +32,6 @@ export default function Home() {
   const [isFocused, setIsFocused] = useState(false);
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-  // useEffect(() => {
-  //   refetch();
-  // }, [searchTerm, selectedCategory]);
-
   return (
     <Container>
       <motion.div
