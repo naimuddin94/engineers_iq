@@ -30,10 +30,21 @@ export default function CardSkeleton() {
                 <div className="h-4 w-full bg-default-200 rounded-lg" />
               </Skeleton>
             </div>
+            <div className="flex flex-wrap text-default-400 items-center gap-2 mt-4">
+              <Skeleton className="w-36 rounded-lg">
+                <div className="h-4 w-full bg-default-200 rounded-lg" />
+              </Skeleton>
+              <Skeleton className="w-36 rounded-lg">
+                <div className="h-4 w-full bg-default-200 rounded-lg" />
+              </Skeleton>
+              <Skeleton className="w-36 rounded-lg">
+                <div className="h-4 w-full bg-default-200 rounded-lg" />
+              </Skeleton>
+            </div>
           </div>
-          <div className="w-full md:w-64 h-40 md:h-24 mt-4 md:mt-0">
+          <div className="w-full md:w-64 h-40 md:h-32 mt-4 md:mt-0">
             <Skeleton className="w-full rounded-lg">
-              <div className="h-20 w-full bg-default-200 rounded-lg" />
+              <div className="h-[9.5rem] md:h-28 w-full bg-default-200 rounded-lg" />
             </Skeleton>
           </div>
         </div>
