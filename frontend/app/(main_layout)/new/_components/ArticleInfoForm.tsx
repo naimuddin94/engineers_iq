@@ -6,7 +6,7 @@ import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import IQInput from "@/components/form/IQInput";
 import IQSelect from "@/components/form/IQSelect";
 import { categoriesData } from "@/const/article/categories";
-import { topicsData } from "@/const/article/topics";
+import { topicsOptions } from "@/const/article/topics";
 
 export default function ArticleInfoForm() {
   return (
@@ -32,7 +32,7 @@ export default function ArticleInfoForm() {
               label="Topics"
               multiple="multiple"
               name="topics"
-              options={topicsData}
+              options={topicsOptions}
             />
           </div>
         </CardBody>

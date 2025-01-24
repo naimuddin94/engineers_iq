@@ -9,9 +9,10 @@ import { useRef, useState } from "react";
 
 import ArticlesView from "@/components/module/home/ArticlesVeiw";
 import { SidebarSection } from "@/components/module/home/sidebar_section";
+import SystemPicks from "@/components/module/home/SystemPicks";
 import Container from "@/components/shared/Container";
 import { categoriesData } from "@/const/article/categories";
-import { topicsData } from "@/const/article/topics";
+import { topicsData, topicsOptions } from "@/const/article/topics";
 import useDebounce from "@/hooks/debounce";
 
 const fadeInUp = {
@@ -136,40 +137,13 @@ export default function Home() {
 
               <motion.div className="w-full lg:w-1/3" variants={fadeInUp}>
                 <div className="sticky top-20">
-                  {/* <SidebarSection title="System Picks">
-                    <AnimatePresence>
-                      {Array.isArray(data) &&
-                        data
-                          .sort(() => 0.5 - Math.random())
-                          .slice(0, 3)
-                          ?.map((article) => (
-                            <motion.div key={article._id} variants={fadeInUp}>
-                              <Link
-                                href={`/articles/${article.author.username}/${article._id}`}
-                              >
-                                <Card className="mb-2">
-                                  <CardBody>
-                                    <h4 className="font-semibold">
-                                      {article.title}
-                                    </h4>
-                                    <p className="text-small text-default-500">
-                                      {article.textArea.slice(0, 40)} ...
-                                    </p>
-                                  </CardBody>
-                                </Card>
-                              </Link>
-                            </motion.div>
-                          ))}
-                    </AnimatePresence>
-                  </SidebarSection> */}
-
                   <SidebarSection title="Recommended topics">
                     <motion.div
                       className="flex flex-wrap gap-2"
                       variants={staggerChildren}
                     >
                       <AnimatePresence>
-                        {topicsData
+                        {topicsOptions
                           .slice(0, topicsData.length / 2)
                           .reverse()
                           .map((topic) => (
@@ -197,6 +171,7 @@ export default function Home() {
                       </AnimatePresence>
                     </motion.div>
                   </SidebarSection>
+                  <SystemPicks />
                   {/* {currentUser && (
                     <SidebarSection title="Who to follow">
                       <motion.div
