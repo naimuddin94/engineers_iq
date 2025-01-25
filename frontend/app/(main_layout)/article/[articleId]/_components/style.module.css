@@ -1,0 +1,111 @@
+:root {
+  --bg-color-light: #ffffff;
+  --bg-color-dark: #1a202c;
+
+  --text-color-light: #333333;
+  --text-color-dark: #e2e8f0;
+
+  --link-color: blue;
+
+  --heading-color-light: #1a202c;
+  --heading-color-dark: #f7fafc;
+
+  --blockquote-border-light: #e2e8f0;
+  --blockquote-border-dark: #4a5568;
+
+  --code-bg-light: #f7fafc;
+  --code-bg-dark: #2d3748;
+
+  --code-text-light: red;
+  --code-text-dark: #fc8181;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: var(--bg-color-dark);
+    --text-color: var(--text-color-dark);
+    --heading-color: var(--heading-color-dark);
+    --blockquote-border: var(--blockquote-border-dark);
+    --code-bg: var(--code-bg-dark);
+    --code-text: var(--code-text-dark);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg-color: var(--bg-color-light);
+    --text-color: var(--text-color-light);
+    --heading-color: var(--heading-color-light);
+    --blockquote-border: var(--blockquote-border-light);
+    --code-bg: var(--code-bg-light);
+    --code-text: var(--code-text-light);
+  }
+}
+
+.container {
+  a {
+    text-decoration: underline;
+    color: #2298ff;
+  }
+
+  h1,
+  h2,
+  h3 {
+    margin-bottom: 1rem;
+    font-weight: bold;
+  }
+
+  h1 {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+
+  h2 {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+
+  p {
+    font-size: 1rem;
+    line-height: 1.625;
+    margin-bottom: 1rem;
+  }
+
+  blockquote {
+    border-left: 4px solid var(--blockquote-border);
+    padding-left: 1rem;
+    font-style: italic;
+    margin: 1rem 0;
+    color: var(--text-color);
+  }
+
+  code {
+    font-family: monospace;
+    font-size: 0.875rem;
+    background-color: var(--code-bg);
+    padding: 0 0.25rem;
+    border-radius: 0.25rem;
+    color: var(--code-text);
+  }
+
+  pre {
+    font-family: monospace;
+    font-size: 0.875rem;
+    background-color: var(--code-bg);
+    padding: 1rem;
+    border-radius: 0.25rem;
+    color: var(--text-color);
+    overflow-x: auto;
+  }
+
+  ul,
+  ol {
+    list-style-position: inside;
+    margin: 1rem 0;
+  }
+}

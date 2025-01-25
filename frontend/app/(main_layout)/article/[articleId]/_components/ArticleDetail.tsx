@@ -11,6 +11,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
 
+import styles from "./style.module.css";
+
 import UserName from "@/components/premium_acc_badge";
 import { IArticle } from "@/types";
 import formatDateReadable from "@/utils/format_date_readable";
@@ -96,7 +98,7 @@ export default function ArticleDetail({ article }: { article: IArticle }) {
         initial={{ opacity: 0 }}
         transition={{ delay: 0.2, duration: 0.5 }}
       >
-        <div className="article-content">
+        <div className={styles.container}>
           <div
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(article?.textarea as string),
