@@ -5,7 +5,8 @@ import { Card, CardBody } from "@nextui-org/card";
 import { motion } from "framer-motion";
 import { CloudLightning, Lightbulb, Sparkles, Users } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
 
 import Container from "@/components/shared/Container";
 
@@ -57,6 +58,43 @@ const features = [
 ];
 
 export default function AboutUs() {
+  const [scrollY, setScrollY] = useState(0);
+  const [featuresInView, setFeaturesInView] = useState(false);
+
+  // Intersection Observer for the "What We Offer" section
+  const { ref, inView } = useInView({
+    threshold: 0.2, // Trigger animation when 20% of the section is visible
+    triggerOnce: true, // Only trigger once
+  });
+
+  useEffect(() => {
+    if (inView) {
+      setFeaturesInView(true);
+    }
+  }, [inView]);
+
+  // Handle scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Variants for motion text
+  const textVariants = {
+    initial: { opacity: 0, x: 0, scale: 1 },
+    animate: (scrollY: number) => ({
+      opacity: 1,
+      x: scrollY > 300 ? (scrollY % 2 === 0 ? 200 : -200) : 0,
+      scale: scrollY > 300 ? 1.2 : 1,
+      transition: { duration: 0.5 },
+    }),
+  };
+
   return (
     <Container>
       <motion.div
@@ -67,12 +105,19 @@ export default function AboutUs() {
           animate: { transition: { staggerChildren: 0.1 } },
         }}
       >
-        <motion.div className="text-center mb-12" variants={fadeInRight}>
+        {/* Top Section with Scroll Animation */}
+        <motion.div
+          animate="animate"
+          className="text-center mb-12"
+          custom={scrollY}
+          initial="initial"
+          variants={textVariants}
+        >
           <h1 className="text-5xl font-bold mb-4">EngineersIQ</h1>
           <h2 className="text-2xl">Transforming Ideas into Code, Together.</h2>
         </motion.div>
 
-        <motion.div className="mb-12" variants={fadeInRight}>
+        <motion.div className="mb-12" custom={scrollY} variants={textVariants}>
           <h2 className="text-3xl font-semibold mb-4">Our Mission</h2>
           <div className="space-y-4">
             <p>
@@ -120,13 +165,25 @@ export default function AboutUs() {
           </p>
         </motion.div>
 
-        <motion.div className="mb-12" variants={fadeInRight}>
+        <motion.div
+          ref={ref} // Attach ref to track visibility
+          className="mb-12"
+        >
           <h2 className="text-3xl font-semibold text-center mb-6">
             What We Offer
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
-              <motion.div key={index} variants={fadeInRight}>
+              <motion.div
+                key={index}
+                animate={featuresInView ? { opacity: 1, x: 0 } : { opacity: 0 }}
+                exit={{ opacity: 0, x: 50 }}
+                initial={{ opacity: 0, x: 50 }}
+                transition={{
+                  duration: 0.3,
+                  delay: (index + 1) * 0.2,
+                }}
+              >
                 <FeatureCard {...feature} />
               </motion.div>
             ))}
