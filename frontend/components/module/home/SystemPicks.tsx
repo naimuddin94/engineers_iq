@@ -2,6 +2,7 @@
 "use client";
 
 import { Card, CardBody } from "@nextui-org/card";
+import DOMPurify from "dompurify";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 
@@ -32,10 +33,7 @@ export default function SystemPicks() {
                 >
                   <Card className="mb-2 hover:scale-[102%] duration-400">
                     <CardBody>
-                      <h4 className="font-semibold">{article.title}</h4>
-                      <p className="text-small text-default-500">
-                        {article.textarea.slice(0, 40)} ...
-                      </p>
+                      <h4 className="font-semibold text-lg">{article.title}</h4>
                     </CardBody>
                   </Card>
                 </Link>
