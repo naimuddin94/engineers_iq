@@ -1,8 +1,14 @@
+.article-content {
+  all: revert;
+}
+
+.article-content * {
+  all: revert;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-
 
 .tiptap {
   :first-child {
