@@ -4,7 +4,7 @@ import { Button } from "@nextui-org/button";
 import { Card, CardBody } from "@nextui-org/card";
 import { motion } from "framer-motion";
 import { CloudLightning, Lightbulb, Sparkles, Users } from "lucide-react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
@@ -60,6 +60,12 @@ const features = [
 export default function AboutUs() {
   const [scrollY, setScrollY] = useState(0);
   const [featuresInView, setFeaturesInView] = useState(false);
+
+  const router = useRouter();
+
+  const handlePushSignin = () => {
+    router.push("/signin");
+  };
 
   // Intersection Observer for the "What We Offer" section
   const { ref, inView } = useInView({
@@ -198,11 +204,14 @@ export default function AboutUs() {
             Ready to enhance your engineering knowledge and connect with
             like-minded enthusiasts?
           </p>
-          <Link passHref href="/signin">
-            <Button className="font-semibold" color="primary" size="lg">
-              Sign Up Now
-            </Button>
-          </Link>
+          <Button
+            className="font-semibold"
+            color="primary"
+            size="lg"
+            onPress={handlePushSignin}
+          >
+            Sign Up Now
+          </Button>
         </motion.div>
       </motion.div>
     </Container>
