@@ -1,5 +1,6 @@
-import EditName from "./_components/EditName";
+import Followers from "./_components/Followers";
 import HandleProfileImage from "./_components/HandleProfileImage";
+import HandleProfileInfo from "./_components/HandleProfileInfo";
 
 import Container from "@/components/shared/Container";
 import { getProfile } from "@/services/AuthService";
@@ -20,9 +21,10 @@ export default async function Profile({ params }: { params: Params }) {
           <HandleProfileImage user={data} />
 
           {/* Handle user fullname for user */}
-          <EditName user={data} />
+          <HandleProfileInfo user={data} />
 
           {/* Following List */}
+          <Followers user={data} />
         </div>
 
         {/* Right Column: Content for mobile, Left for large screens */}

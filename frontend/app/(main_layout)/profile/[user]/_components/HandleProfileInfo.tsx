@@ -11,7 +11,7 @@ import { useUser } from "@/context/user.provider";
 import { getCurrentUser } from "@/services/AuthService";
 import { IUser } from "@/types";
 
-export default function EditName({ user }: { user: IUser }) {
+export default function HandleProfileInfo({ user }: { user: IUser }) {
   const [nameChangedAction, setNameChangedAction] = useState(false);
   const [isAlreadyFollowed, setIsAlreadyFollowed] = useState(false);
   const [isWonProfile, setIsWonProfile] = useState<boolean>(false);

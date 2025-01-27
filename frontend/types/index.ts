@@ -91,6 +91,6 @@ export interface IUser {
   image: string;
   role: string;
   premium: boolean;
-  followers: Pick<IUser, "_id" | "name" | "image">[];
-  following: Pick<IUser, "_id" | "name" | "image">[];
+  followers: Pick<IUser, "_id" | "name" | "image" | "username" | "premium">[];
+  following: Pick<IUser, "_id" | "name" | "image" | "username" | "premium">[];
 }

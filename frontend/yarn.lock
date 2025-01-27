@@ -894,6 +894,25 @@
     tailwind-merge "^2.5.2"
     tailwind-variants "^0.1.20"
 
+"@heroui/tooltip@^2.2.8":
+  version "2.2.8"
+  resolved "https://registry.yarnpkg.com/@heroui/tooltip/-/tooltip-2.2.8.tgz#a9b327cb66c1cf35423685dc38071e313c009144"
+  integrity sha512-rvG8KsLfxHjtC6iKYq8TY9zVo+q5TjDDws1/8uaw/reJAK5x1RvjDr5kMhT2e32eZws/IuZ4Jl3ta0PASpsIOA==
+  dependencies:
+    "@heroui/aria-utils" "2.2.8"
+    "@heroui/dom-animation" "2.1.2"
+    "@heroui/framer-utils" "2.1.7"
+    "@heroui/react-utils" "2.1.4"
+    "@heroui/shared-utils" "2.1.3"
+    "@heroui/use-safe-layout-effect" "2.1.2"
+    "@react-aria/interactions" "3.22.5"
+    "@react-aria/overlays" "3.24.0"
+    "@react-aria/tooltip" "3.7.10"
+    "@react-aria/utils" "3.26.0"
+    "@react-stately/tooltip" "3.5.0"
+    "@react-types/overlays" "3.8.11"
+    "@react-types/tooltip" "3.4.13"
+
 "@heroui/use-aria-button@2.2.4":
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/@heroui/use-aria-button/-/use-aria-button-2.2.4.tgz#4416bd6db82d9e579efd9a5cfca498f86a79f4be"

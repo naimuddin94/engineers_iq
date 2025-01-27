@@ -164,11 +164,11 @@ const getProfileInfoIntoDB = async (username: string) => {
   const user = await User.findOne({ username }).populate([
     {
       path: 'followers',
-      select: 'name username image',
+      select: 'name username image premium',
     },
     {
       path: 'following',
-      select: 'name username image',
+      select: 'name username image premium',
     },
   ]);
 
