@@ -69,7 +69,7 @@ export default function Home() {
           className="min-h-screen bg-background mt-10"
           variants={fadeInUp}
         >
-          <div className="container mx-auto">
+          <div>
             <div className="flex flex-col lg:flex-row gap-8">
               <motion.div
                 className="w-full lg:w-2/3"

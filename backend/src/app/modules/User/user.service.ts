@@ -161,7 +161,16 @@ const getProfileInfoIntoDB = async (username: string) => {
     throw new AppError(status.BAD_REQUEST, 'Username must be provided');
   }
 
-  const user = await User.findOne({ username });
+  const user = await User.findOne({ username }).populate([
+    {
+      path: 'followers',
+      select: 'name username image',
+    },
+    {
+      path: 'following',
+      select: 'name username image',
+    },
+  ]);
 
   if (!user) {
     throw new AppError(status.BAD_REQUEST, 'User does not exist!');

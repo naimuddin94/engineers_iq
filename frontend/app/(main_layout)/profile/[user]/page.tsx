@@ -1,6 +1,6 @@
-import { Avatar } from "@nextui-org/avatar";
+import EditName from "./_components/EditName";
+import HandleProfileImage from "./_components/HandleProfileImage";
 
-import UserName from "@/components/premium_acc_badge";
 import Container from "@/components/shared/Container";
 import { getProfile } from "@/services/AuthService";
 
@@ -16,18 +16,11 @@ export default async function Profile({ params }: { params: Params }) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column: Profile Info for mobile, Right for large screens */}
         <div className="lg:order-2 lg:col-span-1 order-1">
-          <div className="relative group">
-            <Avatar
-              alt={data.name}
-              className="w-24 h-24 mb-3 mt-4"
-              src={data.image}
-            />
-          </div>
+          {/* Handle profile image for user */}
+          <HandleProfileImage user={data} />
 
-          <div className="flex gap-3 items-center">
-            <UserName isPremium={data.premium} name={data.name} />
-          </div>
-          <p className=" text-gray-600">@{data.username}</p>
+          {/* Handle user fullname for user */}
+          <EditName user={data} />
 
           {/* Following List */}
         </div>
