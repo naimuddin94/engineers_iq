@@ -61,9 +61,17 @@ const changePassword = asyncHandler(async (req, res) => {
 
   res
     .status(status.OK)
-    .json(
-      new AppResponse(status.OK, null, 'Password changed successfully')
-    );
+    .json(new AppResponse(status.OK, null, 'Password changed successfully'));
+});
+
+const getUserInfo = asyncHandler(async (req, res) => {
+  const username = req.params.username;
+
+  const result = await UserService.getProfileInfoIntoDB(username);
+
+  res
+    .status(status.OK)
+    .json(new AppResponse(status.OK, result, 'Profile information retrieved'));
 });
 
 export const UserController = {
@@ -71,4 +79,5 @@ export const UserController = {
   signin,
   signout,
   changePassword,
+  getUserInfo,
 };

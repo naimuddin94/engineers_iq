@@ -156,9 +156,24 @@ const changePasswordIntoDB = async (
   return null;
 };
 
+const getProfileInfoIntoDB = async (username: string) => {
+  if (!username) {
+    throw new AppError(status.BAD_REQUEST, 'Username must be provided');
+  }
+
+  const user = await User.findOne({ username });
+
+  if (!user) {
+    throw new AppError(status.BAD_REQUEST, 'User does not exist!');
+  }
+
+  return user;
+};
+
 export const UserService = {
   saveUserIntoDB,
   loginUser,
   logoutUser,
   changePasswordIntoDB,
+  getProfileInfoIntoDB,
 };

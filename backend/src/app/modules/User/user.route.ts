@@ -32,4 +32,6 @@ router
     UserController.changePassword
   );
 
+router.route('/profile/:username').get(UserController.getUserInfo);
+
 export const UserRoutes = router;
