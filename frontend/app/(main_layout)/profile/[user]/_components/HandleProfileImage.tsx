@@ -1,5 +1,19 @@
 /* eslint-disable prettier/prettier */
+"use client";
+
+import { Camera } from "lucide-react";
+import { ChangeEvent, useState } from "react";
+
+/* eslint-disable prettier/prettier */
 export default function HandleProfileImage() {
+  const [isWonProfile, setIsWonProfile] = useState<boolean>(false);
+
+  async function handleChangeProfilePicture(
+    event: ChangeEvent<HTMLInputElement>,
+  ) {
+    console.log(event);
+  }
+
   return (
     <>
       {isWonProfile && (
@@ -9,7 +23,7 @@ export default function HandleProfileImage() {
             htmlFor="profile-picture"
           >
             {/* <span className="text-white">Change</span> */}
-            <CiCamera className="mt-10" size={20} />
+            <Camera className="mt-10" size={20} />
           </label>
           <input
             accept="image/*"
