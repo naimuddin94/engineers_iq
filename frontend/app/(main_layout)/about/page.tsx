@@ -92,11 +92,11 @@ export default function AboutUs() {
 
   // Variants for motion text
   const textVariants = {
-    initial: { opacity: 0, x: 0, scale: 1 },
+    initial: { opacity: 0, x: -50, scale: 1 },
     animate: (scrollY: number) => ({
       opacity: 1,
-      x: scrollY > 300 ? (scrollY % 2 === 0 ? 200 : -200) : 0,
-      scale: scrollY > 300 ? 1.2 : 1,
+      x: scrollY > 300 ? (scrollY % 2 === 0 ? 150 : -150) : 0,
+      scale: scrollY > 300 ? 1.1 : 1,
       transition: { duration: 0.5 },
     }),
   };
@@ -156,7 +156,7 @@ export default function AboutUs() {
           </div>
         </motion.div>
 
-        <motion.div className="mb-12" variants={fadeInRight}>
+        <motion.div className="mb-12 overflow-x-hidden" variants={fadeInRight}>
           <h2 className="text-3xl font-semibold mb-4">Our Community</h2>
           <p className="mb-4">
             EngineersIQ is more than just a platform; it&apos;s a thriving

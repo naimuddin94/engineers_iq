@@ -7,6 +7,8 @@ import { FieldValues } from "react-hook-form";
 
 import axiosInstance from "../lib/axiosInstance";
 
+import { IResponse, IUser } from "@/types";
+
 export const signupUser = async (userData: FieldValues) => {
   try {
     const cookieStore = await cookies();
@@ -47,6 +49,18 @@ export const signout = async () => {
 
     cookieStore.delete("accessToken");
     cookieStore.delete("refreshToken");
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message);
+  }
+};
+
+export const getProfile = async (
+  username: string,
+): Promise<IResponse<IUser>> => {
+  try {
+    const { data } = await axiosInstance.get(`/auth/profile/${username}`);
+
+    return data;
   } catch (error: any) {
     throw new Error(error?.response?.data?.message);
   }
