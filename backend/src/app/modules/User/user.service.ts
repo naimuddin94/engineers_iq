@@ -182,6 +182,20 @@ const updateImageIntoDB = async (
   return user;
 };
 
+const updateNameIntoDB = async (accessToken: string, name: string) => {
+  if (!accessToken) {
+    throw new AppError(status.UNAUTHORIZED, 'Unauthorized access');
+  }
+  const { id } = await verifyToken(accessToken);
+  const user = await User.findById(id);
+  if (!user) {
+    throw new AppError(status.NOT_FOUND, 'User does not exist!');
+  }
+  user.name = name;
+  await user.save();
+  return user;
+};
+
 const getProfileInfoIntoDB = async (username: string) => {
   if (!username) {
     throw new AppError(status.BAD_REQUEST, 'Username must be provided');
@@ -211,5 +225,6 @@ export const UserService = {
   logoutUser,
   changePasswordIntoDB,
   updateImageIntoDB,
+  updateNameIntoDB,
   getProfileInfoIntoDB,
 };
