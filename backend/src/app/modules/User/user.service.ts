@@ -156,6 +156,32 @@ const changePasswordIntoDB = async (
   return null;
 };
 
+const updateImageIntoDB = async (
+  accessToken: string,
+  // eslint-disable-next-line no-undef
+  file: Express.Multer.File
+) => {
+  if (!accessToken) {
+    throw new AppError(status.UNAUTHORIZED, 'Unauthorized access');
+  }
+  const { id } = await verifyToken(accessToken);
+  const user = await User.findById(id);
+  if (!user) {
+    throw new AppError(status.NOT_FOUND, 'User does not exist!');
+  }
+  const imageUrl = await fileUploadOnCloudinary(file.buffer);
+
+  if (!imageUrl) {
+    throw new AppError(
+      status.INTERNAL_SERVER_ERROR,
+      'Something wrong when uploading image'
+    );
+  }
+  user.image = imageUrl;
+  await user.save();
+  return user;
+};
+
 const getProfileInfoIntoDB = async (username: string) => {
   if (!username) {
     throw new AppError(status.BAD_REQUEST, 'Username must be provided');
@@ -184,5 +210,6 @@ export const UserService = {
   loginUser,
   logoutUser,
   changePasswordIntoDB,
+  updateImageIntoDB,
   getProfileInfoIntoDB,
 };
