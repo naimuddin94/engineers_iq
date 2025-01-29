@@ -159,11 +159,16 @@ const changePasswordIntoDB = async (
 const updateImageIntoDB = async (
   accessToken: string,
   // eslint-disable-next-line no-undef
-  file: Express.Multer.File
+  file: Express.Multer.File | undefined
 ) => {
   if (!accessToken) {
     throw new AppError(status.UNAUTHORIZED, 'Unauthorized access');
   }
+
+  if (!file) {
+    throw new AppError(status.BAD_REQUEST, 'File is missing');
+  }
+
   const { id } = await verifyToken(accessToken);
   const user = await User.findById(id);
   if (!user) {

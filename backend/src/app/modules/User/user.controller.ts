@@ -64,6 +64,28 @@ const changePassword = asyncHandler(async (req, res) => {
     .json(new AppResponse(status.OK, null, 'Password changed successfully'));
 });
 
+const changeImage = asyncHandler(async (req, res) => {
+  const accessToken = req.cookies?.accessToken;
+  const file = req.file;
+
+  const result = await UserService.updateImageIntoDB(accessToken, file);
+
+  res
+    .status(status.OK)
+    .json(new AppResponse(status.OK, result, 'Image changed successfully'));
+});
+
+const changeName = asyncHandler(async (req, res) => {
+  const accessToken = req.cookies?.accessToken;
+  const name = req.body.name;
+
+  const result = await UserService.updateNameIntoDB(accessToken, name);
+
+  res
+    .status(status.OK)
+    .json(new AppResponse(status.OK, result, 'Name changed successfully'));
+});
+
 const getUserInfo = asyncHandler(async (req, res) => {
   const username = req.params.username;
 
@@ -79,5 +101,7 @@ export const UserController = {
   signin,
   signout,
   changePassword,
+  changeImage,
+  changeName,
   getUserInfo,
 };

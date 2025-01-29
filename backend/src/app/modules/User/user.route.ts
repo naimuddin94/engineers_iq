@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { validateRequest } from '../../middlewares';
+import { auth, validateRequest } from '../../middlewares';
 import { UserValidation } from '../User/user.validation';
 import { UserController } from './user.controller';
 
@@ -31,6 +31,18 @@ router
     validateRequest(UserValidation.changePasswordValidationSchema),
     UserController.changePassword
   );
+
+router
+  .route('/change-image')
+  .post(
+    upload.single('image'),
+    auth('ADMIN', 'USER'),
+    UserController.changeImage
+  );
+
+router
+  .route('/change-name')
+  .post(auth('ADMIN', 'USER'), UserController.changeName);
 
 router.route('/profile/:username').get(UserController.getUserInfo);
 
