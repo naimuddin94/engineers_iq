@@ -64,12 +64,9 @@ export default function Followers({ user }: { user: IUser }) {
                   <Tooltip
                     content={
                       <div className="px-3 py-1">
-                        <div
-                          className="text-small cursor-pointer hover:scale-105 transition-all"
-                          onClick={() => handleUnfollow(following._id)}
-                        >
+                        <Button onPress={() => handleUnfollow(following._id)}>
                           Unfollow
-                        </div>
+                        </Button>
                         <div className="text-sm hover:scale-105 transition-all">
                           <Link href={`/profile/${following.username}`}>
                             Visit Profile
