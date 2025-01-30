@@ -54,6 +54,26 @@ export const signout = async () => {
   }
 };
 
+export const changeFullname = async (name: string) => {
+  try {
+    const { data } = await axiosInstance.post("/auth/change-name", { name });
+
+    return data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message);
+  }
+};
+
+export const changePassword = async (payload: FieldValues) => {
+  try {
+    const { data } = await axiosInstance.post("/auth/change-password", payload);
+
+    return data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message);
+  }
+};
+
 export const getProfile = async (
   username: string,
 ): Promise<IResponse<IUser>> => {
