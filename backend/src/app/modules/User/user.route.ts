@@ -28,6 +28,7 @@ router.route('/signout').post(UserController.signout);
 router
   .route('/change-password')
   .post(
+    auth('ADMIN', 'USER'),
     validateRequest(UserValidation.changePasswordValidationSchema),
     UserController.changePassword
   );

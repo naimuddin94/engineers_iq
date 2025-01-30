@@ -17,6 +17,7 @@ export interface IInputProps {
   name: string;
   disabled?: boolean;
   placeholder?: string;
+  startContent?: ReactNode;
   endContent?: ReactNode;
   defaultValue?: string | null;
 }
