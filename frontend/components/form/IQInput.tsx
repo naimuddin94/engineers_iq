@@ -13,6 +13,7 @@ export default function IQInput({
   label,
   name,
   endContent,
+  startContent,
 }: IInputProps) {
   const {
     register,
@@ -28,6 +29,7 @@ export default function IQInput({
       isRequired={required}
       label={label}
       size={size}
+      startContent={startContent}
       type={type}
       variant={variant}
     />
