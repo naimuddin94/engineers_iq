@@ -4,20 +4,44 @@
 import { Avatar } from "@nextui-org/avatar";
 import { Camera } from "lucide-react";
 import { ChangeEvent, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import { useUser } from "@/context/user.provider";
+import { useChangeProfileImage } from "@/hooks/auth.hook";
 import { getCurrentUser } from "@/services/AuthService";
 import { IUser } from "@/types";
 
 /* eslint-disable prettier/prettier */
 export default function HandleProfileImage({ user }: { user: IUser }) {
   const [isWonProfile, setIsWonProfile] = useState<boolean>(false);
+  const [updateImage, setUpdateImage] = useState(user?.image);
   const { isLoading: userLoading } = useUser();
+
+  // For change profile image
+  const { mutate: changeImageFN } = useChangeProfileImage();
 
   async function handleChangeProfilePicture(
     event: ChangeEvent<HTMLInputElement>,
   ) {
-    console.log(event);
+    if (!event?.target?.files) return;
+
+    const formData = new FormData();
+
+    formData.append("image", event?.target?.files[0]);
+
+    const toastId = toast.loading("Updating profile photo...");
+
+    changeImageFN(formData, {
+      onSuccess: function (data) {
+        setUpdateImage(data?.data?.image);
+        toast.success(data?.message, { id: toastId });
+      },
+      onError: function (err) {
+        toast.error(err?.message || "Failed to update profile photo", {
+          id: toastId,
+        });
+      },
+    });
   }
 
   useEffect(() => {
@@ -37,7 +61,7 @@ export default function HandleProfileImage({ user }: { user: IUser }) {
       <Avatar
         alt={user?.name}
         className="w-24 h-24 mb-3 mt-4"
-        src={user?.image}
+        src={updateImage}
       />
       {isWonProfile && (
         <>

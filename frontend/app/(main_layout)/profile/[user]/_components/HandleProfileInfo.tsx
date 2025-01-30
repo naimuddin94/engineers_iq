@@ -29,8 +29,6 @@ export default function HandleProfileInfo({ user }: { user: IUser }) {
   const [updatedName, setUpdatedName] = useState(user.name);
   const [isAlreadyFollowed, setIsAlreadyFollowed] = useState(false);
   const [isWonProfile, setIsWonProfile] = useState<boolean>(false);
-  const [isPassChangeLoading, setIsPassChangeLoading] =
-    useState<boolean>(false);
   const { isLoading: userLoading } = useUser();
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 

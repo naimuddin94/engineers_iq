@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import {
   changeFullname,
   changePassword,
+  changeProfileImage,
   getProfile,
   signinUser,
   signupUser,
@@ -57,6 +58,13 @@ export const useChangePassword = () => {
     onError: (error) => {
       toast.error(error.message);
     },
+  });
+};
+
+export const useChangeProfileImage = () => {
+  return useMutation<IResponse<IUser>, Error, FormData>({
+    mutationKey: ["CHANGE_PHOTO"],
+    mutationFn: async (payload) => await changeProfileImage(payload),
   });
 };
 

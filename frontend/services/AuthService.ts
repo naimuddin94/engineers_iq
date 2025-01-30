@@ -74,6 +74,16 @@ export const changePassword = async (payload: FieldValues) => {
   }
 };
 
+export const changeProfileImage = async (payload: FormData) => {
+  try {
+    const { data } = await axiosInstance.post("/auth/change-image", payload);
+
+    return data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message);
+  }
+};
+
 export const getProfile = async (
   username: string,
 ): Promise<IResponse<IUser>> => {
