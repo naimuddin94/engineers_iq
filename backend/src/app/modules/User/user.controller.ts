@@ -96,6 +96,18 @@ const getUserInfo = asyncHandler(async (req, res) => {
     .json(new AppResponse(status.OK, result, 'Profile information retrieved'));
 });
 
+const toggleFollower = asyncHandler(async (req, res) => {
+  const accessToken = req.cookies?.accessToken;
+  const userId = req.params.userId;
+
+  const { result, message } = await UserService.toggleFollowerIntoDB(
+    accessToken,
+    userId
+  );
+
+  res.status(status.OK).json(new AppResponse(status.OK, result, message));
+});
+
 export const UserController = {
   signup,
   signin,
@@ -104,4 +116,5 @@ export const UserController = {
   changeImage,
   changeName,
   getUserInfo,
+  toggleFollower,
 };
