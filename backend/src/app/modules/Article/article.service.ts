@@ -144,9 +144,108 @@ const fetchArticleFromDB = async (articleId: string) => {
   return article;
 };
 
+const toggleClap = async (articleId: string, accessToken: string) => {
+  const article = await Article.findById(articleId);
+
+  if (!article) {
+    throw new AppError(status.NOT_FOUND, 'Article not found');
+  }
+
+  const { id } = await verifyToken(accessToken);
+
+  const user = await User.findById(id);
+
+  if (!user) {
+    throw new AppError(status.BAD_REQUEST, 'User does not exist!');
+  }
+
+  // Check if the user has already clapped
+  const isClap = article.claps.some(
+    (uuid) => uuid.toString() === user._id.toString()
+  );
+
+  let result = null;
+
+  if (isClap) {
+    result = await Article.findByIdAndUpdate(
+      articleId,
+      { $pull: { claps: user._id } },
+      { new: true }
+    );
+  } else {
+    result = await Article.findByIdAndUpdate(
+      articleId,
+      { $addToSet: { claps: user._id } },
+      { new: true }
+    );
+  }
+
+  return result;
+};
+
+const addComment = async (
+  articleId: string,
+  accessToken: string,
+  content: string
+) => {
+  const article = await Article.findById(articleId);
+
+  if (!article) {
+    throw new AppError(status.NOT_FOUND, 'Article not found');
+  }
+
+  const { id } = await verifyToken(accessToken);
+
+  const user = await User.findById(id);
+
+  if (!user) {
+    throw new AppError(status.BAD_REQUEST, 'User does not exist!');
+  }
+
+  const newComment = {
+    user: user._id,
+    content,
+  };
+
+  article.comments.push(newComment);
+  await article.save();
+
+  return article;
+};
+
+const deleteComment = async (
+  articleId: string,
+  userId: string,
+  commentId: string
+) => {
+  const article = await Article.findById(articleId);
+
+  if (!article) {
+    throw new AppError(status.NOT_FOUND, 'Article not found');
+  }
+
+  const commentIndex = article.comments.findIndex(
+    (comment) =>
+      comment._id.toString() === commentId && comment.user.toString() === userId
+  );
+
+  if (commentIndex === -1) {
+    throw new AppError(
+      status.FORBIDDEN,
+      'Comment not found or you are not authorized to delete this comment'
+    );
+  }
+
+  article.comments.splice(commentIndex, 1);
+  await article.save();
+
+  return article;
+};
+
 export const ArticleService = {
   saveArticleIntoDB,
   updateArticleInDB,
   fetchArticlesFromDB,
   fetchArticleFromDB,
+  toggleClap,
 };
