@@ -1,4 +1,5 @@
 import status from 'http-status';
+import mongoose from 'mongoose';
 import { verifyToken } from '../../lib';
 import { AppError, fileUploadOnCloudinary } from '../../utils';
 import {
@@ -224,6 +225,77 @@ const getProfileInfoIntoDB = async (username: string) => {
   return user;
 };
 
+const toggleFollowerIntoDB = async (accessToken: string, userId: string) => {
+  if (!accessToken) {
+    throw new AppError(status.UNAUTHORIZED, 'Unauthorized access');
+  }
+
+  const { id } = await verifyToken(accessToken);
+
+  const user = await User.findById(id);
+
+  if (!user) {
+    throw new AppError(status.BAD_REQUEST, 'User does not exist!');
+  }
+
+  const followingUser = await User.findById(userId);
+
+  if (!followingUser) {
+    throw new AppError(status.NOT_FOUND, 'User does not exist!');
+  }
+
+  const isFollowing = await User.exists({ _id: id, following: userId });
+
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    let result = null;
+    let message = 'Follow successfully';
+
+    if (isFollowing) {
+      await User.findByIdAndUpdate(
+        id,
+        { $pull: { following: userId } },
+        { session }
+      );
+      result = await User.findByIdAndUpdate(
+        userId,
+        { $pull: { followers: id } },
+        { session, new: true }
+      )
+        .populate('followers')
+        .select('followers');
+      message = 'Unfollow successfully';
+    } else {
+      await User.findByIdAndUpdate(
+        id,
+        { $addToSet: { following: userId } },
+        { session }
+      );
+      result = await User.findByIdAndUpdate(
+        userId,
+        { $addToSet: { followers: id } },
+        { session, new: true }
+      )
+        .populate('followers')
+        .select('followers');
+    }
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return { result, message };
+  } catch {
+    await session.abortTransaction();
+    session.endSession();
+    throw new AppError(
+      status.INTERNAL_SERVER_ERROR,
+      'Failed to toggle following status'
+    );
+  }
+};
+
 export const UserService = {
   saveUserIntoDB,
   loginUser,
@@ -232,4 +304,5 @@ export const UserService = {
   updateImageIntoDB,
   updateNameIntoDB,
   getProfileInfoIntoDB,
+  toggleFollowerIntoDB,
 };

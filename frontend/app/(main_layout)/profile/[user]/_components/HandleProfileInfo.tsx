@@ -19,7 +19,11 @@ import { toast } from "sonner";
 
 import UserName from "@/components/premium_acc_badge";
 import { useUser } from "@/context/user.provider";
-import { useChangeFullname, useChangePassword } from "@/hooks/auth.hook";
+import {
+  useChangeFullname,
+  useChangePassword,
+  useToggleFollowing,
+} from "@/hooks/auth.hook";
 import { AuthValidation } from "@/schemas/auth.schema";
 import { getCurrentUser } from "@/services/AuthService";
 import { IUser } from "@/types";
@@ -84,6 +88,24 @@ export default function HandleProfileInfo({ user }: { user: IUser }) {
         },
       },
     );
+  }
+
+  // For following
+  const { mutate: followingFN } = useToggleFollowing();
+
+  function handleFollowing() {
+    const toastId = toast.loading("Following...");
+
+    followingFN(user._id, {
+      onSuccess: function (data) {
+        toast.success(data?.message, { id: toastId });
+      },
+      onError: function (err) {
+        toast.error(err?.message || "Failed to following", {
+          id: toastId,
+        });
+      },
+    });
   }
 
   useEffect(() => {
@@ -224,7 +246,13 @@ export default function HandleProfileInfo({ user }: { user: IUser }) {
           Unfollow
         </Button>
       ) : (
-        <Button className="mt-4" color="primary" size="sm" variant="flat">
+        <Button
+          className="mt-4"
+          color="primary"
+          size="sm"
+          variant="flat"
+          onPress={handleFollowing}
+        >
           Follow
         </Button>
       )}

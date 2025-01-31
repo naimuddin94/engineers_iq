@@ -10,10 +10,14 @@ import { useEffect, useState } from "react";
 
 import UserName from "@/components/premium_acc_badge";
 import { useUser } from "@/context/user.provider";
+import { useUserProfile } from "@/hooks/auth.hook";
 import { getCurrentUser } from "@/services/AuthService";
-import { IUser } from "@/types";
 
-export default function Followers({ user }: { user: IUser }) {
+export default function Followers({ username }: { username: string }) {
+  const { data } = useUserProfile(username);
+
+  const user = data?.data;
+
   const [isWonProfile, setIsWonProfile] = useState<boolean>(false);
   const [flowFlungDisplay, setFlowFlungDisplay] = useState<number>(5);
   const { isLoading: userLoading } = useUser();
