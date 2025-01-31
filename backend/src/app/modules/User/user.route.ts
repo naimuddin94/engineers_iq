@@ -47,4 +47,8 @@ router
 
 router.route('/profile/:username').get(UserController.getUserInfo);
 
+router
+  .route('/following/:userId')
+  .patch(auth('ADMIN', 'USER'), UserController.toggleFollower);
+
 export const UserRoutes = router;
