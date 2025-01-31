@@ -8,9 +8,12 @@ const signinSchema = z.object({
     .max(80, "Must shorter than 80 characters"),
   password: z
     .string()
-    .trim()
-    .min(6, "Password needs to be at lest 6 character")
-    .max(20, { message: "Password no longer that 20 characters" }),
+    .nonempty("Password is required")
+    .min(6, "Password must be at least 6 characters long")
+    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number")
+    .regex(/[\W_]/, "Password must contain at least one special character"),
 });
 
 const signupSchema = z.object({
@@ -41,11 +44,13 @@ const signupSchema = z.object({
     .min(3, "Username must be at least 3 characters long")
     .max(20, "Username must shorter than 20 characters"),
   password: z
-    .string({
-      required_error: "Password is required",
-    })
-    .min(6, { message: "Password must be at least 6 characters" })
-    .max(20, { message: "Password no longer that 20 characters" }),
+    .string()
+    .nonempty("Password is required")
+    .min(6, "Password must be at least 6 characters long")
+    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number")
+    .regex(/[\W_]/, "Password must contain at least one special character"),
 });
 
 const passwordChangeSchema = z
