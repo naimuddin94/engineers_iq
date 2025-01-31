@@ -24,7 +24,7 @@ export default async function Profile({ params }: { params: Params }) {
           <HandleProfileInfo user={data} />
 
           {/* Following List */}
-          <Followers user={data} />
+          <Followers username={user} />
         </div>
 
         {/* Right Column: Content for mobile, Left for large screens */}

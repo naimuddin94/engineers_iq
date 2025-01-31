@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -11,10 +11,12 @@ import {
   getProfile,
   signinUser,
   signupUser,
+  toggleFollowing,
 } from "../services/AuthService";
 
 import { IResponse, IUser } from "@/types";
 
+// User Signup Mutation
 export const useUserSignup = () => {
   return useMutation<any, Error, FieldValues>({
     mutationKey: ["USER_SIGNUP"],
@@ -28,6 +30,7 @@ export const useUserSignup = () => {
   });
 };
 
+// User Signin Mutation
 export const useUserSignin = () => {
   return useMutation<any, Error, FieldValues>({
     mutationKey: ["USER_SIGNIN"],
@@ -41,6 +44,7 @@ export const useUserSignin = () => {
   });
 };
 
+// Change Fullname Mutation
 export const useChangeFullname = () => {
   return useMutation<IResponse<IUser>, Error, string>({
     mutationKey: ["CHANGE_FULLNAME"],
@@ -48,6 +52,7 @@ export const useChangeFullname = () => {
   });
 };
 
+// Change Password Mutation
 export const useChangePassword = () => {
   return useMutation<IResponse<IUser>, Error, FieldValues>({
     mutationKey: ["CHANGE_PASSWORD"],
@@ -61,6 +66,7 @@ export const useChangePassword = () => {
   });
 };
 
+// Change Profile Image Mutation
 export const useChangeProfileImage = () => {
   return useMutation<IResponse<IUser>, Error, FormData>({
     mutationKey: ["CHANGE_PHOTO"],
@@ -68,8 +74,22 @@ export const useChangeProfileImage = () => {
   });
 };
 
+// Toggle Following Mutation
+export const useToggleFollowing = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<IResponse<string[]>, Error, string>({
+    mutationKey: ["FOLLOWING"],
+    mutationFn: async (userId) => await toggleFollowing(userId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["PROFILE"] });
+    },
+  });
+};
+
+// Fetch User Profile Query
 export const useUserProfile = (username: string) => {
-  return useQuery({
+  return useQuery<IResponse<IUser>>({
     queryKey: ["PROFILE"],
     queryFn: () => getProfile(username),
   });

@@ -96,6 +96,18 @@ export const getProfile = async (
   }
 };
 
+export const toggleFollowing = async (
+  userId: string,
+): Promise<IResponse<string[]>> => {
+  try {
+    const { data } = await axiosInstance.patch(`/auth/following/${userId}`);
+
+    return data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message);
+  }
+};
+
 export const getCurrentUser = async () => {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("accessToken")?.value;
