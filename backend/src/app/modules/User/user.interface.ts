@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-vars */
-import { Document, HydratedDocument, Model, ObjectId } from 'mongoose';
+import { HydratedDocument, Model, ObjectId } from 'mongoose';
 import { TRole } from './user.constant';
 
-export interface IUser extends Document {
+export interface IUser {
+  _id: ObjectId;
   name: string;
   email: string;
   username: string;
