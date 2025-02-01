@@ -36,16 +36,16 @@ const saveCommentIntoDB = async (
 
     const [comment] = await Comment.create([payload], { session });
 
-    await Article.findByIdAndUpdate(
+    const result = await Article.findByIdAndUpdate(
       articleId,
       { $push: { comments: comment._id } },
-      { session }
+      { session, new: true }
     );
 
     await session.commitTransaction();
     session.endSession();
 
-    return comment;
+    return result;
   } catch {
     await session.abortTransaction();
     await session.endSession();
@@ -87,7 +87,44 @@ const clapsOnComment = async (commentId: string, token: string) => {
   return updatedComment;
 };
 
+const deleteCommentIntoDB = async (accessToken: string, commentId: string) => {
+  const comment = await Comment.findById(commentId);
+
+  if (!comment) {
+    throw new AppError(status.NOT_FOUND, 'Comment not found');
+  }
+
+  const { id } = await verifyToken(accessToken);
+
+  const user = await User.findById(id);
+
+  if (!user) {
+    throw new AppError(status.BAD_REQUEST, 'User does not exist!');
+  }
+
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    await Comment.findByIdAndDelete(commentId, { session });
+    const result = await Article.findByIdAndUpdate(
+      comment.article,
+      { $pull: { comments: comment._id } },
+      { session, new: true }
+    );
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return result;
+  } catch {
+    await session.abortTransaction();
+    session.endSession();
+  }
+};
+
 export const CommentService = {
   saveCommentIntoDB,
   clapsOnComment,
+  deleteCommentIntoDB,
 };

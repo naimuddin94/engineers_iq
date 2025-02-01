@@ -85,16 +85,13 @@ export const clapOnArticle = async (articleId: string) => {
 
 export const addComment = async (articleId: string, content: string) => {
   try {
-    const data = await fetchAPI<IResponse<IArticle>>(
-      `/articles/comments/${articleId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ content }),
+    const data = await fetchAPI<IResponse<IArticle>>(`/comments/${articleId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify({ content }),
+    });
 
     if (data?.success) {
       revalidateTag(`article-${articleId}`);

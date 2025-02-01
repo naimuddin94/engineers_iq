@@ -63,10 +63,14 @@ export const useAddComment = () => {
     mutationFn: async ({ articleId, content }) =>
       await addComment(articleId, content),
     onSuccess: (data) => {
-      toast.success(data?.message);
+      toast.success(data?.message, {
+        position: "bottom-left",
+      });
     },
     onError: (error) => {
-      toast.error(error.message);
+      toast.error(error.message, {
+        position: "bottom-left",
+      });
     },
   });
 };

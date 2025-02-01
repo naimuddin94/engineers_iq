@@ -3,11 +3,17 @@ import { useFormContext, useWatch } from "react-hook-form";
 
 import { IInputProps } from "@/types";
 
+interface IProps extends IInputProps {
+  row?: number;
+}
+
 export default function IQTextarea({
   name,
   label,
   variant = "bordered",
-}: IInputProps) {
+  className,
+  row = 6,
+}: IProps) {
   const { register } = useFormContext();
 
   const currentValue = useWatch({ name });
@@ -15,8 +21,9 @@ export default function IQTextarea({
   return (
     <Textarea
       {...register(name)}
+      className={className}
       label={label}
-      minRows={6}
+      minRows={row}
       value={currentValue || ""}
       variant={variant}
     />

@@ -1,9 +1,7 @@
 import status from 'http-status';
-import mongoose from 'mongoose';
 import QueryBuilder from '../../builders/QueryBuilder';
 import { verifyToken } from '../../lib';
 import { AppError, fileUploadOnCloudinary } from '../../utils';
-import Comment from '../Comment/comment.model';
 import User from '../User/user.model';
 import { articleSearchableFields } from './article.constant';
 import { IArticle } from './article.interface';
@@ -135,7 +133,7 @@ const fetchArticlesFromDB = async (query: Record<string, unknown>) => {
 
 // Fetch single article by article id
 const fetchArticleFromDB = async (articleId: string) => {
-  const article = await Article.findById(articleId);
+  const article = await Article.findById(articleId).populate('comments');
 
   if (!article) {
     throw new AppError(status.NOT_FOUND, 'Article not exist!');
@@ -185,92 +183,10 @@ const toggleClapIntoDB = async (accessToken: string, articleId: string) => {
   return result;
 };
 
-const addCommentIntoDB = async (
-  accessToken: string,
-  articleId: string,
-  content: string
-) => {
-  const article = await Article.findById(articleId);
-
-  if (!article) {
-    throw new AppError(status.NOT_FOUND, 'Article not found');
-  }
-
-  const { id } = await verifyToken(accessToken);
-
-  const user = await User.findById(id);
-
-  if (!user) {
-    throw new AppError(status.BAD_REQUEST, 'User does not exist!');
-  }
-
-  const session = await mongoose.startSession();
-  session.startTransaction();
-
-  try {
-    const comment = await Comment.create([{ user: user._id, content }], {
-      session,
-    });
-
-    const result = await Article.findByIdAndUpdate(
-      articleId,
-      { $addToSet: { comments: comment[0]._id } },
-      { session, new: true }
-    );
-
-    await session.commitTransaction();
-    session.endSession();
-
-    return result;
-  } catch {
-    await session.abortTransaction();
-    session.endSession();
-    throw new AppError(status.INTERNAL_SERVER_ERROR, 'Failed to add comment');
-  }
-};
-
-const deleteCommentIntoDB = async (accessToken: string, commentId: string) => {
-  const comment = await Comment.findById(commentId);
-
-  if (!comment) {
-    throw new AppError(status.NOT_FOUND, 'Comment not found');
-  }
-
-  const { id } = await verifyToken(accessToken);
-
-  const user = await User.findById(id);
-
-  if (!user) {
-    throw new AppError(status.BAD_REQUEST, 'User does not exist!');
-  }
-
-  const session = await mongoose.startSession();
-  session.startTransaction();
-
-  try {
-    await Comment.findByIdAndDelete(commentId, { session });
-    const result = await Article.findByIdAndUpdate(
-      comment.article,
-      { $pull: { comments: comment._id } },
-      { session, new: true }
-    );
-
-    await session.commitTransaction();
-    session.endSession();
-
-    return result;
-  } catch {
-    await session.abortTransaction();
-    session.endSession();
-  }
-};
-
 export const ArticleService = {
   saveArticleIntoDB,
   updateArticleInDB,
   fetchArticlesFromDB,
   fetchArticleFromDB,
   toggleClapIntoDB,
-  addCommentIntoDB,
-  deleteCommentIntoDB,
 };

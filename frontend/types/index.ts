@@ -20,6 +20,7 @@ export interface IInputProps {
   startContent?: ReactNode;
   endContent?: ReactNode;
   defaultValue?: string | null;
+  className?: string;
 }
 
 export interface IUser {

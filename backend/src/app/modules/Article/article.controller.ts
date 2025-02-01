@@ -75,44 +75,10 @@ const toggleClap = asyncHandler(async (req, res) => {
     .json(new AppResponse(httpStatus.OK, result, 'React successfully'));
 });
 
-const addComment = asyncHandler(async (req, res) => {
-  const articleId = req.params.id;
-  const accessToken = req.cookies.accessToken;
-  const content = req.body.content;
-
-  const result = await ArticleService.addCommentIntoDB(
-    accessToken,
-    articleId,
-    content
-  );
-
-  res
-    .status(httpStatus.OK)
-    .json(new AppResponse(httpStatus.OK, result, 'Comment successfully'));
-});
-
-const deleteComment = asyncHandler(async (req, res) => {
-  const commentId = req.params.id;
-  const accessToken = req.cookies.accessToken;
-
-  const result = await ArticleService.deleteCommentIntoDB(
-    accessToken,
-    commentId
-  );
-
-  res
-    .status(httpStatus.OK)
-    .json(
-      new AppResponse(httpStatus.OK, result, 'Comment remove successfully')
-    );
-});
-
 export const ArticleController = {
   createArticle,
   updateArticle,
   getArticles,
   getArticle,
   toggleClap,
-  addComment,
-  deleteComment,
 };

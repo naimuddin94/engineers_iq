@@ -30,6 +30,8 @@ import { useRef, useState } from "react";
 // static img ofr sharing
 import { toast } from "sonner";
 
+import CommentDrawer from "./CommentDrawer";
+
 import UserName from "@/components/premium_acc_badge";
 import { useUser } from "@/context/user.provider";
 import { useClapOmArticle } from "@/hooks/article.hook";
@@ -42,10 +44,13 @@ import { IArticle } from "@/types";
 import formatDateReadable from "@/utils/format_date_readable";
 
 export default function ArticleDetail({ article }: { article: IArticle }) {
-  const [coped, setCoped] = useState(false);
-  const contentRef = useRef<HTMLDivElement | null>(null);
-
   const { user } = useUser();
+  const [coped, setCoped] = useState(false);
+  const [isCommentDrawerOpen, setIsCommentDrawerOpen] = useState(false);
+
+  const hasClapped = article?.claps.some((id) => id === user?.id);
+
+  const contentRef = useRef<HTMLDivElement | null>(null);
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -198,6 +203,7 @@ export default function ArticleDetail({ article }: { article: IArticle }) {
           </>
         </ModalContent>
       </Modal>
+
       <div ref={contentRef} className="mx-auto relative" id="content">
         <motion.div
           animate={{ opacity: 1, y: 0 }}
@@ -227,9 +233,13 @@ export default function ArticleDetail({ article }: { article: IArticle }) {
           </div>
           <div className="flex items-center space-x-4 text-gray-500">
             <Button
-              className={`mt-2 p-0`}
+              className={`mt-2 p-0 ${hasClapped ? "text-danger" : ""}`}
               size="sm"
-              startContent={<Heart className={`w-5 h-5`} />}
+              startContent={
+                <Heart
+                  className={`w-6 h-6 ${hasClapped ? "fill-current text-danger" : ""}`}
+                />
+              }
               variant="light"
             >
               {article?.claps.length}
@@ -293,9 +303,13 @@ export default function ArticleDetail({ article }: { article: IArticle }) {
             <div className="flex justify-between items-center">
               <div className="flex items-center space-x-4">
                 <Button
-                  className={`mt-2 p-0`}
+                  className={`mt-2 p-0 ${hasClapped ? "text-danger" : ""}`}
                   size="sm"
-                  startContent={<Heart className={`w-6 h-6`} />}
+                  startContent={
+                    <Heart
+                      className={`w-6 h-6 ${hasClapped ? "fill-current text-danger" : ""}`}
+                    />
+                  }
                   variant="light"
                   onPress={handleClap}
                 >
@@ -306,6 +320,7 @@ export default function ArticleDetail({ article }: { article: IArticle }) {
                   size="sm"
                   startContent={<MessageCircle className="w-6 h-6" />}
                   variant="light"
+                  onPress={() => setIsCommentDrawerOpen(!isCommentDrawerOpen)}
                 >
                   {article?.comments.length}
                 </Button>
@@ -329,6 +344,14 @@ export default function ArticleDetail({ article }: { article: IArticle }) {
             </div>
           </CardBody>
         </Card>
+
+        <CommentDrawer
+          articleId={article._id}
+          author={article.author._id}
+          comments={article?.comments}
+          isOpen={isCommentDrawerOpen}
+          onClose={() => setIsCommentDrawerOpen(false)}
+        />
       </div>
     </>
   );
