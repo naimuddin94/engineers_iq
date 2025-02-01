@@ -1,7 +1,9 @@
 import status from 'http-status';
+import mongoose from 'mongoose';
 import QueryBuilder from '../../builders/QueryBuilder';
 import { verifyToken } from '../../lib';
 import { AppError, fileUploadOnCloudinary } from '../../utils';
+import Comment from '../Comment/comment.model';
 import User from '../User/user.model';
 import { articleSearchableFields } from './article.constant';
 import { IArticle } from './article.interface';
@@ -144,7 +146,7 @@ const fetchArticleFromDB = async (articleId: string) => {
   return article;
 };
 
-const toggleClap = async (articleId: string, accessToken: string) => {
+const toggleClap = async (accessToken: string, articleId: string) => {
   const article = await Article.findById(articleId);
 
   if (!article) {
@@ -184,8 +186,8 @@ const toggleClap = async (articleId: string, accessToken: string) => {
 };
 
 const addComment = async (
-  articleId: string,
   accessToken: string,
+  articleId: string,
   content: string
 ) => {
   const article = await Article.findById(articleId);
@@ -202,44 +204,65 @@ const addComment = async (
     throw new AppError(status.BAD_REQUEST, 'User does not exist!');
   }
 
-  const newComment = {
-    user: user._id,
-    content,
-  };
+  const session = await mongoose.startSession();
+  session.startTransaction();
 
-  article.comments.push(newComment);
-  await article.save();
+  try {
+    const comment = await Comment.create([{ user: user._id, content }], {
+      session,
+    });
 
-  return article;
+    const result = await Article.findByIdAndUpdate(
+      articleId,
+      { $addToSet: { comments: comment[0]._id } },
+      { session, new: true }
+    );
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return result;
+  } catch {
+    await session.abortTransaction();
+    session.endSession();
+    throw new AppError(status.INTERNAL_SERVER_ERROR, 'Failed to add comment');
+  }
 };
 
-const deleteComment = async (
-  articleId: string,
-  userId: string,
-  commentId: string
-) => {
-  const article = await Article.findById(articleId);
+const deleteComment = async (accessToken: string, commentId: string) => {
+  const comment = await Comment.findById(commentId);
 
-  if (!article) {
-    throw new AppError(status.NOT_FOUND, 'Article not found');
+  if (!comment) {
+    throw new AppError(status.NOT_FOUND, 'Comment not found');
   }
 
-  const commentIndex = article.comments.findIndex(
-    (comment) =>
-      comment._id.toString() === commentId && comment.user.toString() === userId
-  );
+  const { id } = await verifyToken(accessToken);
 
-  if (commentIndex === -1) {
-    throw new AppError(
-      status.FORBIDDEN,
-      'Comment not found or you are not authorized to delete this comment'
+  const user = await User.findById(id);
+
+  if (!user) {
+    throw new AppError(status.BAD_REQUEST, 'User does not exist!');
+  }
+
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    await Comment.findByIdAndDelete(commentId, { session });
+    const result = await Article.findByIdAndUpdate(
+      comment.article,
+      { $pull: { comments: comment._id } },
+      { session, new: true }
     );
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return result;
+  } catch {
+    await session.abortTransaction();
+    session.endSession();
   }
-
-  article.comments.splice(commentIndex, 1);
-  await article.save();
-
-  return article;
 };
 
 export const ArticleService = {
@@ -248,4 +271,6 @@ export const ArticleService = {
   fetchArticlesFromDB,
   fetchArticleFromDB,
   toggleClap,
+  addComment,
+  deleteComment,
 };

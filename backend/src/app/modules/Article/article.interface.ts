@@ -1,6 +1,7 @@
 import { Document, ObjectId } from 'mongoose';
 
 export interface IArticle extends Document {
+  _id: ObjectId;
   author: ObjectId | unknown;
   title: string;
   textarea: string;
