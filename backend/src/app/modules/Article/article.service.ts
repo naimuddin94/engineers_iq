@@ -146,7 +146,7 @@ const fetchArticleFromDB = async (articleId: string) => {
   return article;
 };
 
-const toggleClap = async (accessToken: string, articleId: string) => {
+const toggleClapIntoDB = async (accessToken: string, articleId: string) => {
   const article = await Article.findById(articleId);
 
   if (!article) {
@@ -185,7 +185,7 @@ const toggleClap = async (accessToken: string, articleId: string) => {
   return result;
 };
 
-const addComment = async (
+const addCommentIntoDB = async (
   accessToken: string,
   articleId: string,
   content: string
@@ -229,7 +229,7 @@ const addComment = async (
   }
 };
 
-const deleteComment = async (accessToken: string, commentId: string) => {
+const deleteCommentIntoDB = async (accessToken: string, commentId: string) => {
   const comment = await Comment.findById(commentId);
 
   if (!comment) {
@@ -270,7 +270,7 @@ export const ArticleService = {
   updateArticleInDB,
   fetchArticlesFromDB,
   fetchArticleFromDB,
-  toggleClap,
-  addComment,
-  deleteComment,
+  toggleClapIntoDB,
+  addCommentIntoDB,
+  deleteCommentIntoDB,
 };
