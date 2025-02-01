@@ -5,14 +5,18 @@ import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 import { FieldValues } from "react-hook-form";
 
-import axiosInstance from "../lib/axiosInstance";
-
+import { fetchAPI } from "@/lib/fetch";
 import { IResponse, IUser } from "@/types";
 
-export const signupUser = async (userData: FieldValues) => {
+export const signupUser = async (userData: FormData) => {
   try {
     const cookieStore = await cookies();
-    const { data } = await axiosInstance.post("/auth/signup", userData);
+    const data = await fetchAPI<
+      IResponse<IUser & { accessToken: string; refreshToken: string }>
+    >("/auth/signup", {
+      method: "POST",
+      body: userData,
+    });
 
     if (data?.success) {
       cookieStore.set("accessToken", data?.data?.accessToken);
@@ -25,10 +29,18 @@ export const signupUser = async (userData: FieldValues) => {
   }
 };
 
-export const signinUser = async (userData: FieldValues) => {
+export const signinUser = async (credentials: FieldValues) => {
   try {
     const cookieStore = await cookies();
-    const { data } = await axiosInstance.post("/auth/signin", userData);
+    const data = await fetchAPI<
+      IResponse<IUser & { accessToken: string; refreshToken: string }>
+    >("/auth/signin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
+    });
 
     if (data?.success) {
       cookieStore.set("accessToken", data?.data?.accessToken);
@@ -45,7 +57,7 @@ export const signout = async () => {
   try {
     const cookieStore = await cookies();
 
-    await axiosInstance.post("/auth/signout");
+    await fetchAPI<null>("/auth/signout");
 
     cookieStore.delete("accessToken");
     cookieStore.delete("refreshToken");
@@ -56,7 +68,13 @@ export const signout = async () => {
 
 export const changeFullname = async (name: string) => {
   try {
-    const { data } = await axiosInstance.post("/auth/change-name", { name });
+    const data = await fetchAPI<IResponse<IUser>>("/auth/change-name", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name }),
+    });
 
     return data;
   } catch (error: any) {
@@ -66,7 +84,13 @@ export const changeFullname = async (name: string) => {
 
 export const changePassword = async (payload: FieldValues) => {
   try {
-    const { data } = await axiosInstance.post("/auth/change-password", payload);
+    const { data } = await fetchAPI<IResponse<IUser>>("/auth/change-password", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
 
     return data;
   } catch (error: any) {
@@ -76,7 +100,10 @@ export const changePassword = async (payload: FieldValues) => {
 
 export const changeProfileImage = async (payload: FormData) => {
   try {
-    const { data } = await axiosInstance.post("/auth/change-image", payload);
+    const data = await fetchAPI<IResponse<IUser>>("/auth/change-image", {
+      method: "PATCH",
+      body: payload,
+    });
 
     return data;
   } catch (error: any) {
@@ -88,7 +115,11 @@ export const getProfile = async (
   username: string,
 ): Promise<IResponse<IUser>> => {
   try {
-    const { data } = await axiosInstance.get(`/auth/profile/${username}`);
+    const data = await fetchAPI<IResponse<IUser>>(`/auth/profile/${username}`, {
+      next: {
+        tags: ["PROFILE"],
+      },
+    });
 
     return data;
   } catch (error: any) {
@@ -96,11 +127,11 @@ export const getProfile = async (
   }
 };
 
-export const toggleFollowing = async (
-  userId: string,
-): Promise<IResponse<string[]>> => {
+export const toggleFollowing = async (userId: string) => {
   try {
-    const { data } = await axiosInstance.patch(`/auth/following/${userId}`);
+    const data = await fetchAPI<IResponse<IUser>>(`/auth/following/${userId}`, {
+      method: "PATCH",
+    });
 
     return data;
   } catch (error: any) {

@@ -24,7 +24,6 @@ export default async function ArticleDetailsPage({
     );
   }
 
-
   return (
     <Container>
       <ArticleDetail article={data?.data} />

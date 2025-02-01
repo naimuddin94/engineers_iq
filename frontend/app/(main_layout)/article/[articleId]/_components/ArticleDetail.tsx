@@ -28,7 +28,11 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 
 // static img ofr sharing
+import { toast } from "sonner";
+
 import UserName from "@/components/premium_acc_badge";
+import { useUser } from "@/context/user.provider";
+import { useClapOmArticle } from "@/hooks/article.hook";
 import facebook from "@/public/share/facebook.png";
 import linkedin from "@/public/share/linkedin.png";
 import mail from "@/public/share/mail.png";
@@ -41,9 +45,11 @@ export default function ArticleDetail({ article }: { article: IArticle }) {
   const [coped, setCoped] = useState(false);
   const contentRef = useRef<HTMLDivElement | null>(null);
 
+  const { user } = useUser();
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const handleDownload = () => {
+  function handleDownload() {
     const element = contentRef.current;
 
     if (!element) return;
@@ -61,7 +67,7 @@ export default function ArticleDetail({ article }: { article: IArticle }) {
     };
 
     html2pdf().from(element).set(options).save();
-  };
+  }
 
   // copy link
   function handleCopyLink() {
@@ -110,6 +116,16 @@ export default function ArticleDetail({ article }: { article: IArticle }) {
 
       window.open(whatsappUrl, "_blank");
     }
+  }
+
+  // For claps on article
+  const { mutate: clapFN } = useClapOmArticle();
+
+  function handleClap() {
+    if (!user) {
+      return toast.error("You must be logged in");
+    }
+    clapFN(article._id);
   }
 
   return (
@@ -281,6 +297,7 @@ export default function ArticleDetail({ article }: { article: IArticle }) {
                   size="sm"
                   startContent={<Heart className={`w-6 h-6`} />}
                   variant="light"
+                  onPress={handleClap}
                 >
                   {article?.claps.length}
                 </Button>

@@ -27,7 +27,7 @@ router.route('/signout').post(UserController.signout);
 
 router
   .route('/change-password')
-  .post(
+  .patch(
     auth('ADMIN', 'USER'),
     validateRequest(UserValidation.changePasswordValidationSchema),
     UserController.changePassword
@@ -35,7 +35,7 @@ router
 
 router
   .route('/change-image')
-  .post(
+  .patch(
     upload.single('image'),
     auth('ADMIN', 'USER'),
     UserController.changeImage
@@ -43,7 +43,7 @@ router
 
 router
   .route('/change-name')
-  .post(auth('ADMIN', 'USER'), UserController.changeName);
+  .patch(auth('ADMIN', 'USER'), UserController.changeName);
 
 router.route('/profile/:username').get(UserController.getUserInfo);
 

@@ -28,4 +28,3 @@ export const validateRequestCookies = (schema: AnyZodObject) => {
     }
   );
 };
-

@@ -2,9 +2,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
-import { FieldValues } from "react-hook-form";
+import { revalidateTag } from "next/cache";
 
-import axiosInstance from "@/lib/axiosInstance";
+import { fetchAPI } from "@/lib/fetch";
 import {
   IArticle,
   IFilterOptions,
@@ -12,9 +12,16 @@ import {
   IResponseWithMetadata,
 } from "@/types";
 
-export const createArticle = async (articleData: FieldValues) => {
+export const createArticle = async (articleData: FormData) => {
   try {
-    const { data } = await axiosInstance.post("/articles", articleData);
+    const data = await fetchAPI<IResponse<IArticle>>("/articles", {
+      method: "POST",
+      body: articleData,
+    });
+
+    if (data?.success) {
+      revalidateTag(`articles-${data?.data?._id}`);
+    }
 
     return data;
   } catch (error: any) {
@@ -22,15 +29,20 @@ export const createArticle = async (articleData: FieldValues) => {
   }
 };
 
-export const fetchArticles = async (
-  params: IFilterOptions,
-): Promise<IResponseWithMetadata<IArticle[]>> => {
+export const fetchArticles = async (params: IFilterOptions) => {
   try {
     // Build query string dynamically
     const queryParams = new URLSearchParams(
       Object.entries(params).filter(([_, value]) => value !== undefined),
     ).toString();
-    const { data } = await axiosInstance.get(`/articles?${queryParams}`);
+    const data = await fetchAPI<IResponseWithMetadata<IArticle[]>>(
+      `/articles?${queryParams}`,
+      {
+        next: {
+          tags: ["articles"],
+        },
+      },
+    );
 
     return data;
   } catch (error: any) {
@@ -38,11 +50,74 @@ export const fetchArticles = async (
   }
 };
 
-export const fetchArticle = async (
-  articleId: string,
-): Promise<IResponse<IArticle>> => {
+export const fetchArticle = async (articleId: string) => {
   try {
-    const { data } = await axiosInstance.get(`/articles/${articleId}`);
+    const data = await fetchAPI<IResponse<IArticle>>(`/articles/${articleId}`, {
+      next: {
+        tags: [`article-${articleId}`],
+      },
+    });
+
+    return data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message);
+  }
+};
+
+export const clapOnArticle = async (articleId: string) => {
+  try {
+    const data = await fetchAPI<IResponse<IArticle>>(
+      `/articles/claps/${articleId}`,
+      {
+        method: "PATCH",
+      },
+    );
+
+    if (data?.success) {
+      revalidateTag(`article-${articleId}`);
+    }
+
+    return data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message);
+  }
+};
+
+export const addComment = async (articleId: string, content: string) => {
+  try {
+    const data = await fetchAPI<IResponse<IArticle>>(
+      `/articles/comments/${articleId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content }),
+      },
+    );
+
+    if (data?.success) {
+      revalidateTag(`article-${articleId}`);
+    }
+
+    return data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message);
+  }
+};
+
+export const deleteComment = async (commentId: string) => {
+  try {
+    const data = await fetchAPI<IResponse<IArticle>>(
+      `/articles/comments/${commentId}`,
+      {
+        method: "DELETE",
+      },
+    );
+
+    if (data?.success) {
+      revalidateTag(`article-${data?.data?._id}`);
+    }
 
     return data;
   } catch (error: any) {
