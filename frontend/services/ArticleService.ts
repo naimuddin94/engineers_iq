@@ -106,7 +106,7 @@ export const addComment = async (articleId: string, content: string) => {
 export const deleteComment = async (commentId: string) => {
   try {
     const data = await fetchAPI<IResponse<IArticle>>(
-      `/articles/comments/${commentId}`,
+      `/comments/remove/${commentId}`,
       {
         method: "DELETE",
       },

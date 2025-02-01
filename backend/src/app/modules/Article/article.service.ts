@@ -133,7 +133,15 @@ const fetchArticlesFromDB = async (query: Record<string, unknown>) => {
 
 // Fetch single article by article id
 const fetchArticleFromDB = async (articleId: string) => {
-  const article = await Article.findById(articleId).populate('comments');
+  const article = await Article.findById(articleId).populate([
+    {
+      path: 'comments',
+      populate: {
+        path: 'user',
+        select: 'name image username',
+      },
+    },
+  ]);
 
   if (!article) {
     throw new AppError(status.NOT_FOUND, 'Article not exist!');

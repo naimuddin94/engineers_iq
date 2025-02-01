@@ -28,7 +28,20 @@ const clapsOnComment = asyncHandler(async (req, res) => {
     .json(new AppResponse(status.OK, result, 'Claps on comment successfully'));
 });
 
+const deleteComment = asyncHandler(async (req, res) => {
+  const accessToken = req.cookies.accessToken;
+  const commentId = req.params.commentId;
+  const result = await CommentService.deleteCommentIntoDB(
+    accessToken,
+    commentId
+  );
+  res
+    .status(status.OK)
+    .json(new AppResponse(status.OK, result, 'Comment removed successfully'));
+});
+
 export const CommentController = {
   createComment,
   clapsOnComment,
+  deleteComment,
 };

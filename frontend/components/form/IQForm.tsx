@@ -35,6 +35,10 @@ export default function IQForm({
 
   const methods = useForm(formConfig);
 
+  if (methods.formState.isSubmitSuccessful) {
+    methods.reset();
+  }
+
   const submitHandler = methods.handleSubmit;
 
   return (

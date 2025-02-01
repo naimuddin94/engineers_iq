@@ -10,7 +10,7 @@ import IQForm from "@/components/form/IQForm";
 import IQTextarea from "@/components/form/IQTextArea";
 import UserName from "@/components/premium_acc_badge";
 import { useUser } from "@/context/user.provider";
-import { useAddComment } from "@/hooks/article.hook";
+import { useAddComment, useRemoveComment } from "@/hooks/article.hook";
 import { IComment } from "@/types";
 import formatDateReadable from "@/utils/format_date_readable";
 
@@ -62,8 +62,23 @@ export default function CommentDrawer({
     }
   };
 
+  // For removing comment
+
+  const { mutate: commentRemoveFN } = useRemoveComment();
+
   const handelDeleteComment = async (commentId: string) => {
-    console.log(commentId);
+    const toastId = toast.loading("Remove comment....", {
+      position: "bottom-left",
+    });
+
+    commentRemoveFN(commentId, {
+      onSuccess: function (data) {
+        toast.success(data?.message, { id: toastId, position: "bottom-left" });
+      },
+      onError: function (error) {
+        toast.error(error?.message, { id: toastId, position: "bottom-left" });
+      },
+    });
   };
 
   useEffect(() => {
@@ -122,7 +137,7 @@ export default function CommentDrawer({
                   Respond
                 </Button>
               </IQForm>
-              <div className="space-y-4">
+              <div className="space-y-4 mt-2">
                 {comments
                   .slice()
                   .reverse()

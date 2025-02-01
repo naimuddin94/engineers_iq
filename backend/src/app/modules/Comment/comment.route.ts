@@ -17,4 +17,8 @@ router
   .route('/claps/:commentId')
   .post(auth('ADMIN', 'USER'), CommentController.clapsOnComment);
 
+router
+  .route('/remove/:commentId')
+  .delete(auth('ADMIN', 'USER'), CommentController.deleteComment);
+
 export const CommentRoutes = router;
