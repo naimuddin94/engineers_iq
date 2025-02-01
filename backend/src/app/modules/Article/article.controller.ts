@@ -76,7 +76,7 @@ const toggleClap = asyncHandler(async (req, res) => {
 });
 
 const addComment = asyncHandler(async (req, res) => {
-  const articleId = req.params.articleId;
+  const articleId = req.params.id;
   const accessToken = req.cookies.accessToken;
   const content = req.body.content;
 
@@ -92,7 +92,7 @@ const addComment = asyncHandler(async (req, res) => {
 });
 
 const deleteComment = asyncHandler(async (req, res) => {
-  const commentId = req.params.commentId;
+  const commentId = req.params.id;
   const accessToken = req.cookies.accessToken;
 
   const result = await ArticleService.deleteCommentIntoDB(

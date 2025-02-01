@@ -28,4 +28,13 @@ router
   )
   .get(ArticleController.getArticle);
 
+router
+  .route('/claps/:articleId')
+  .patch(auth('USER', 'ADMIN'), ArticleController.toggleClap);
+
+router
+  .route('/comments/:id')
+  .post(auth('USER', 'ADMIN'), ArticleController.addComment)
+  .delete(auth('USER', 'ADMIN'), ArticleController.deleteComment);
+
 export const ArticleRoutes = router;
