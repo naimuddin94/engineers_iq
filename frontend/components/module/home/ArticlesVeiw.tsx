@@ -2,13 +2,42 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { useEffect } from "react";
 
 import ArticleCard from "@/components/shared/ArticleCard";
 import CardSkeleton from "@/components/shared/Skeleton";
 import { useGetArticles } from "@/hooks/article.hook";
+import { IFilterOptions } from "@/types";
 
-export default function ArticlesView() {
-  const { data, isLoading, error } = useGetArticles({});
+interface IProps {
+  filterData: {
+    selectedCategory: string;
+    selectedTopic: string;
+    searchTerm: string;
+  };
+}
+
+export default function ArticlesView({ filterData }: IProps) {
+  const params: IFilterOptions = {};
+
+  if (filterData?.selectedCategory?.length) {
+    params.category = filterData.selectedCategory;
+  }
+
+  if (filterData?.searchTerm?.trim().length) {
+    params.searchTerm = filterData.searchTerm;
+  }
+
+  if (filterData?.selectedTopic) {
+    params.topics = filterData.selectedTopic;
+  }
+
+  const { data, isLoading, error, refetch, isRefetching } =
+    useGetArticles(params);
+
+  useEffect(() => {
+    refetch();
+  }, [filterData]);
 
   return (
     <>
@@ -18,7 +47,7 @@ export default function ArticlesView() {
             <h1>Something happened when fetched articles</h1>
           </div>
         )}
-        {!error && isLoading
+        {(!error && isLoading) || isRefetching
           ? Array.from({ length: 3 }).map((_, idx) => (
               <CardSkeleton key={idx} />
             ))

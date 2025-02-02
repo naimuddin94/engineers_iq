@@ -132,7 +132,10 @@ export default function Home() {
                   </AnimatePresence>
                 </motion.div>
 
-                <ArticlesView />
+                {/* For viewing article list */}
+                <ArticlesView
+                  filterData={{ selectedCategory, selectedTopic, searchTerm }}
+                />
               </motion.div>
 
               <motion.div className="w-full lg:w-1/3" variants={fadeInUp}>

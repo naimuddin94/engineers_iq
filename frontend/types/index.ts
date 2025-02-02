@@ -40,6 +40,7 @@ export interface IFilterOptions {
   fields?: string;
   sort?: string;
   category?: string;
+  topics?: string;
 }
 
 export interface IMeta {
