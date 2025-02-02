@@ -107,6 +107,18 @@ const toggleFollower = asyncHandler(async (req, res) => {
   res.status(status.OK).json(new AppResponse(status.OK, result, message));
 });
 
+const getAnalytics = asyncHandler(async (req, res) => {
+  const userId = req.params.userId;
+
+  const result = await UserService.getUserAnalyticsFromDB(userId);
+
+  res
+    .status(status.OK)
+    .json(
+      new AppResponse(status.OK, result, 'Analytics retrieved successfully')
+    );
+});
+
 export const UserController = {
   signup,
   signin,
@@ -116,4 +128,5 @@ export const UserController = {
   changeName,
   getUserInfo,
   toggleFollower,
+  getAnalytics,
 };

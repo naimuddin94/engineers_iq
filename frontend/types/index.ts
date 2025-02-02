@@ -41,6 +41,7 @@ export interface IFilterOptions {
   sort?: string;
   category?: string;
   topics?: string;
+  author?: string;
 }
 
 export interface IMeta {

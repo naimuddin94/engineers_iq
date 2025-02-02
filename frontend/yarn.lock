@@ -866,6 +866,26 @@
     "@react-stately/utils" "3.10.5"
     "@react-types/datepicker" "3.9.0"
 
+"@heroui/tabs@^2.2.8":
+  version "2.2.8"
+  resolved "https://registry.yarnpkg.com/@heroui/tabs/-/tabs-2.2.8.tgz#54d8511f38c6ccd4926a68ffe167c73b3a77b116"
+  integrity sha512-3cKwXiUeZNOa4wBalJOBdlOSa0IFFRY4FHR5wOsTiq1UDr2D1sSVEAtqPc5ye3Ly31OUWVe2Pl6opFY+LaEEbQ==
+  dependencies:
+    "@heroui/aria-utils" "2.2.8"
+    "@heroui/framer-utils" "2.1.7"
+    "@heroui/react-utils" "2.1.4"
+    "@heroui/shared-utils" "2.1.3"
+    "@heroui/use-is-mounted" "2.1.2"
+    "@heroui/use-update-effect" "2.1.2"
+    "@react-aria/focus" "3.19.0"
+    "@react-aria/interactions" "3.22.5"
+    "@react-aria/tabs" "3.9.8"
+    "@react-aria/utils" "3.26.0"
+    "@react-stately/tabs" "3.7.0"
+    "@react-types/shared" "3.26.0"
+    "@react-types/tabs" "3.3.11"
+    scroll-into-view-if-needed "3.0.10"
+
 "@heroui/theme@2.4.5":
   version "2.4.5"
   resolved "https://registry.yarnpkg.com/@heroui/theme/-/theme-2.4.5.tgz#b544c3efd0aeba134113a78b16125f946c18eb2f"
@@ -1004,6 +1024,11 @@
   dependencies:
     "@react-aria/ssr" "3.9.7"
 
+"@heroui/use-is-mounted@2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@heroui/use-is-mounted/-/use-is-mounted-2.1.2.tgz#902a345a9f5a0e078c784fffc56b48f4fd1d825a"
+  integrity sha512-yS4ZdTiAcW5KxZg1z5Tzd50zJ9lis1xL7G2CsaWu28rgZs4kQylGCBDuFfeD+cG4JmtktDq9GhtG/V2XL2DwSQ==
+
 "@heroui/use-measure@2.1.1":
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/@heroui/use-measure/-/use-measure-2.1.1.tgz#5870fe872fa73b838012b417de5720fb0a5e8520"
@@ -1023,6 +1048,11 @@
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/@heroui/use-safe-layout-effect/-/use-safe-layout-effect-2.1.2.tgz#3b4dfd4f959c025e2c804c77afe853535c91f9c6"
   integrity sha512-AVfgvaO2zw30JDKj1LyFPzz+JULMygC/TUK/5g4YA3O/4OwgS8lT8XRNM721zwmYkntFPBx7lYcIRcm8hPWkXA==
+
+"@heroui/use-update-effect@2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@heroui/use-update-effect/-/use-update-effect-2.1.2.tgz#a59ec77fa60a76afaf574941931b7d65ab7cc982"
+  integrity sha512-83OgHOYfToynF8xP14bbM60zw26iHGkziFOiUIsFA+ZRpLLcIcRZFY9lC+SxIRYEkBe3GIuwwEM6Fez3Xa8u1g==
 
 "@hookform/resolvers@^3.10.0":
   version "3.10.0"
@@ -2650,6 +2680,20 @@
     "@react-types/switch" "^3.5.7"
     "@swc/helpers" "^0.5.0"
 
+"@react-aria/tabs@3.9.8":
+  version "3.9.8"
+  resolved "https://registry.yarnpkg.com/@react-aria/tabs/-/tabs-3.9.8.tgz#a0a647a4e2d1783125779473536419fd8caa9cfa"
+  integrity sha512-Nur/qRFBe+Zrt4xcCJV/ULXCS3Mlae+B89bp1Gl20vSDqk6uaPtGk+cS5k03eugOvas7AQapqNJsJgKd66TChw==
+  dependencies:
+    "@react-aria/focus" "^3.19.0"
+    "@react-aria/i18n" "^3.12.4"
+    "@react-aria/selection" "^3.21.0"
+    "@react-aria/utils" "^3.26.0"
+    "@react-stately/tabs" "^3.7.0"
+    "@react-types/shared" "^3.26.0"
+    "@react-types/tabs" "^3.3.11"
+    "@swc/helpers" "^0.5.0"
+
 "@react-aria/textfield@3.15.0":
   version "3.15.0"
   resolved "https://registry.yarnpkg.com/@react-aria/textfield/-/textfield-3.15.0.tgz#17ebac0b73f084622aaf9697576b82155bed67cb"
@@ -2859,7 +2903,7 @@
     "@react-types/shared" "^3.26.0"
     "@swc/helpers" "^0.5.0"
 
-"@react-stately/list@^3.11.1":
+"@react-stately/list@^3.11.1", "@react-stately/list@^3.11.2":
   version "3.11.2"
   resolved "https://registry.yarnpkg.com/@react-stately/list/-/list-3.11.2.tgz#11f1002707dfb54af391a24ca8ef063b6a8cde26"
   integrity sha512-eU2tY3aWj0SEeC7lH9AQoeAB4LL9mwS54FvTgHHoOgc1ZIwRJUaZoiuETyWQe98AL8KMgR1nrnDJ1I+CcT1Y7g==
@@ -2916,6 +2960,26 @@
     "@react-stately/collections" "^3.12.1"
     "@react-stately/utils" "^3.10.5"
     "@react-types/shared" "^3.27.0"
+    "@swc/helpers" "^0.5.0"
+
+"@react-stately/tabs@3.7.0":
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/@react-stately/tabs/-/tabs-3.7.0.tgz#f849b334c5e7d39a37c2e9ffa3114531bf8ce6e4"
+  integrity sha512-ox4hTkfZCoR4Oyr3Op3rBlWNq2Wxie04vhEYpTZQ2hobR3l4fYaOkd7CPClILktJ3TC104j8wcb0knWxIBRx9w==
+  dependencies:
+    "@react-stately/list" "^3.11.1"
+    "@react-types/shared" "^3.26.0"
+    "@react-types/tabs" "^3.3.11"
+    "@swc/helpers" "^0.5.0"
+
+"@react-stately/tabs@^3.7.0":
+  version "3.7.1"
+  resolved "https://registry.yarnpkg.com/@react-stately/tabs/-/tabs-3.7.1.tgz#342fac307357c277e9a6e17dba077ea784b8ace2"
+  integrity sha512-gr9ACyuWrYuc727h7WaHdmNw8yxVlUyQlguziR94MdeRtFGQnf3V6fNQG3kxyB77Ljko69tgDF7Nf6kfPUPAQQ==
+  dependencies:
+    "@react-stately/list" "^3.11.2"
+    "@react-types/shared" "^3.27.0"
+    "@react-types/tabs" "^3.3.12"
     "@swc/helpers" "^0.5.0"
 
 "@react-stately/toggle@3.8.0":
@@ -3141,6 +3205,20 @@
   version "3.5.8"
   resolved "https://registry.yarnpkg.com/@react-types/switch/-/switch-3.5.8.tgz#fd2d2c7fab236d3daaca57cfe34b3ec37cb0fef5"
   integrity sha512-sL7jmh8llF8BxzY4HXkSU4bwU8YU6gx45P85D0AdYXgRHxU9Cp7BQPOMF4pJoQ8TTej05MymY5q7xvJVmxUTAQ==
+  dependencies:
+    "@react-types/shared" "^3.27.0"
+
+"@react-types/tabs@3.3.11":
+  version "3.3.11"
+  resolved "https://registry.yarnpkg.com/@react-types/tabs/-/tabs-3.3.11.tgz#b7db710ce2ca42a4e72cd2a581070212d2b07793"
+  integrity sha512-BjF2TqBhZaIcC4lc82R5pDJd1F7kstj1K0Nokhz99AGYn8C0ITdp6lR+DPVY9JZRxKgP9R2EKfWGI90Lo7NQdA==
+  dependencies:
+    "@react-types/shared" "^3.26.0"
+
+"@react-types/tabs@^3.3.11", "@react-types/tabs@^3.3.12":
+  version "3.3.12"
+  resolved "https://registry.yarnpkg.com/@react-types/tabs/-/tabs-3.3.12.tgz#7cd69dae549136ede13f35878e65ccff7bb4522f"
+  integrity sha512-E9O9G+wf9kaQ8UbDEDliW/oxYlJnh7oDCW1zaMOySwnG4yeCh7Wu02EOCvlQW4xvgn/i+lbEWgirf7L+yj5nRg==
   dependencies:
     "@react-types/shared" "^3.27.0"
 

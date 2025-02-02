@@ -134,7 +134,11 @@ export default function Home() {
 
                 {/* For viewing article list */}
                 <ArticlesView
-                  filterData={{ selectedCategory, selectedTopic, searchTerm }}
+                  filterData={{
+                    selectedCategory,
+                    selectedTopic,
+                    searchTerm: debouncedSearchTerm,
+                  }}
                 />
               </motion.div>
 

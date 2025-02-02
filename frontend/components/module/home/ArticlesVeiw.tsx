@@ -2,6 +2,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { FileX } from "lucide-react";
 import { useEffect } from "react";
 
 import ArticleCard from "@/components/shared/ArticleCard";
@@ -47,26 +48,34 @@ export default function ArticlesView({ filterData }: IProps) {
             <h1>Something happened when fetched articles</h1>
           </div>
         )}
-        {(!error && isLoading) || isRefetching
-          ? Array.from({ length: 3 }).map((_, idx) => (
-              <CardSkeleton key={idx} />
-            ))
-          : Array.isArray(data?.data) &&
-            !isLoading &&
-            data?.data?.map((article, idx) => (
-              <motion.div
-                key={article._id}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -50 }}
-                initial={{ opacity: 0, y: 50 }}
-                transition={{
-                  duration: 0.3,
-                  delay: (idx + 1) * 0.2,
-                }}
-              >
-                <ArticleCard article={article} />
-              </motion.div>
-            ))}
+        {(!error && isLoading) || isRefetching ? (
+          Array.from({ length: 3 }).map((_, idx) => <CardSkeleton key={idx} />)
+        ) : data?.data && data?.data?.length > 0 ? (
+          data?.data?.map((article, idx) => (
+            <motion.div
+              key={article._id}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -50 }}
+              initial={{ opacity: 0, y: 50 }}
+              transition={{
+                duration: 0.3,
+                delay: (idx + 1) * 0.2,
+              }}
+            >
+              <ArticleCard article={article} />
+            </motion.div>
+          ))
+        ) : (
+          <div className="min-h-[50vh] flex flex-col justify-center items-center text-center space-y-4">
+            <FileX className="w-16 h-16 text-gray-400" />
+            <h1 className="text-2xl font-semibold text-gray-600">
+              No articles found!
+            </h1>
+            <p className="text-gray-500">
+              Try searching for something else or check back later.
+            </p>
+          </div>
+        )}
       </AnimatePresence>
     </>
   );

@@ -2,6 +2,7 @@ import status from 'http-status';
 import mongoose from 'mongoose';
 import { verifyToken } from '../../lib';
 import { AppError, fileUploadOnCloudinary } from '../../utils';
+import Article from '../Article/article.model';
 import {
   IChangePasswordPayload,
   ILoginPayload,
@@ -274,6 +275,42 @@ const toggleFollowerIntoDB = async (accessToken: string, userId: string) => {
   }
 };
 
+const getUserAnalyticsFromDB = async (authorId: string) => {
+  const result = await Article.aggregate([
+    { $match: { author: new mongoose.Types.ObjectId(authorId) } },
+    {
+      $group: {
+        _id: null,
+        totalPosts: { $sum: 1 },
+        totalPostViews: { $sum: '$views' },
+        totalClaps: { $sum: { $size: '$claps' } },
+        totalComments: { $sum: { $size: '$comments' } },
+        averagePostsPerMonth: {
+          $avg: {
+            $let: {
+              vars: {
+                postMonth: { $month: '$createdAt' },
+                postYear: { $year: '$createdAt' },
+              },
+              in: 1,
+            },
+          },
+        },
+      },
+    },
+  ]);
+
+  return result.length > 0
+    ? result[0]
+    : {
+        totalPosts: 0,
+        totalPostViews: 0,
+        totalClaps: 0,
+        totalComments: 0,
+        averagePostsPerMonth: 0,
+      };
+};
+
 export const UserService = {
   saveUserIntoDB,
   loginUser,
@@ -283,4 +320,5 @@ export const UserService = {
   updateNameIntoDB,
   getProfileInfoIntoDB,
   toggleFollowerIntoDB,
+  getUserAnalyticsFromDB,
 };

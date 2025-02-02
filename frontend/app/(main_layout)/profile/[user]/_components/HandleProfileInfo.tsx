@@ -99,6 +99,7 @@ export default function HandleProfileInfo({ user }: { user: IUser }) {
     followingFN(user._id, {
       onSuccess: function (data) {
         toast.success(data?.message, { id: toastId });
+        setIsAlreadyFollowed(!isAlreadyFollowed);
       },
       onError: function (err) {
         toast.error(err?.message || "Failed to following", {
@@ -115,7 +116,7 @@ export default function HandleProfileInfo({ user }: { user: IUser }) {
       if (currentUser && currentUser?.username === user?.username) {
         setIsWonProfile(true);
       } else {
-        if (user?.following?.includes(currentUser?.id)) {
+        if (user.followers?.some((user) => user?._id === currentUser?.id)) {
           setIsAlreadyFollowed(true);
         }
       }
@@ -242,7 +243,13 @@ export default function HandleProfileInfo({ user }: { user: IUser }) {
           Update Password
         </Button>
       ) : isAlreadyFollowed ? (
-        <Button className="mt-4" color="primary" size="sm" variant="flat">
+        <Button
+          className="mt-4"
+          color="primary"
+          size="sm"
+          variant="flat"
+          onPress={handleFollowing}
+        >
           Unfollow
         </Button>
       ) : (

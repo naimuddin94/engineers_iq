@@ -2,13 +2,15 @@
 "use client";
 
 import { Card, CardBody } from "@nextui-org/card";
-import DOMPurify from "dompurify";
+import { Chip } from "@nextui-org/chip";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 
 import { SidebarSection } from "./sidebar_section";
 
 import { useGetArticles } from "@/hooks/article.hook";
+import calculateReadTime from "@/utils/calculate_read_time";
+import formatDateReadable from "@/utils/format_date_readable";
 
 const fadeInUp = {
   initial: { opacity: 0, y: -20 },
@@ -17,7 +19,7 @@ const fadeInUp = {
 };
 
 export default function SystemPicks() {
-  const { data, isLoading, error } = useGetArticles({});
+  const { data } = useGetArticles({});
 
   return (
     <SidebarSection title="System Picks">
@@ -28,12 +30,26 @@ export default function SystemPicks() {
             .slice(0, 3)
             ?.map((article) => (
               <motion.div key={article._id} variants={fadeInUp}>
-                <Link
-                  href={`/articles/${article.author.username}/${article._id}`}
-                >
+                <Link href={`/article/${article._id}`}>
                   <Card className="mb-2 hover:scale-[102%] duration-400">
                     <CardBody>
-                      <h4 className="font-semibold text-lg">{article.title}</h4>
+                      <Chip size="sm" variant="flat">
+                        {article.category}
+                      </Chip>
+                      <h4 className="font-semibold text-lg mt-2">{article.title}</h4>
+                      <div className="flex flex-wrap text-default-400 items-center gap-2">
+                        <span className="text-small">
+                          {formatDateReadable(article.createdAt)}
+                        </span>
+                        ·
+                        <span className="text-small ">
+                          {calculateReadTime(article.textarea)} min read
+                        </span>
+                        ·
+                        <span className="text-small ">
+                          {article.views} views
+                        </span>
+                      </div>
                     </CardBody>
                   </Card>
                 </Link>

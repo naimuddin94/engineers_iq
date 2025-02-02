@@ -1,6 +1,7 @@
 import Followers from "./_components/Followers";
 import HandleProfileImage from "./_components/HandleProfileImage";
 import HandleProfileInfo from "./_components/HandleProfileInfo";
+import ProfileArticles from "./_components/ProfileArticles";
 
 import Container from "@/components/shared/Container";
 import { getProfile } from "@/services/AuthService";
@@ -28,21 +29,7 @@ export default async function Profile({ params }: { params: Params }) {
         </div>
 
         {/* Right Column: Content for mobile, Left for large screens */}
-        <div className="lg:order-1 lg:col-span-2 order-2">
-          <div className="flex flex-col items-start mb-8">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold">
-              {data?.name}
-            </h1>
-            <div className="flex mt-4 space-x-4 flex-wrap">
-              <p
-                className={`font-medium underline cursor-pointer`}
-                color="foreground"
-              >
-                Home
-              </p>
-            </div>
-          </div>
-        </div>
+        <ProfileArticles user={data} />
       </div>
     </Container>
   );
