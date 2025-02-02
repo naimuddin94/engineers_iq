@@ -26,8 +26,6 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
-
-// static img ofr sharing
 import { toast } from "sonner";
 
 import CommentDrawer from "./CommentDrawer";

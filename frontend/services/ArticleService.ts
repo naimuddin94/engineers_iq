@@ -7,6 +7,7 @@ import { revalidateTag } from "next/cache";
 import { fetchAPI } from "@/lib/fetch";
 import {
   IArticle,
+  IComment,
   IFilterOptions,
   IResponse,
   IResponseWithMetadata,
@@ -114,6 +115,29 @@ export const deleteComment = async (commentId: string) => {
 
     if (data?.success) {
       revalidateTag(`article-${data?.data?._id}`);
+    }
+
+    return data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message);
+  }
+};
+
+export const updateComment = async (commentId: string, content: string) => {
+  try {
+    const data = await fetchAPI<IResponse<IComment>>(
+      `/comments/edit/${commentId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content }),
+      },
+    );
+
+    if (data?.success) {
+      revalidateTag(`article-${data?.data?.article}`);
     }
 
     return data;

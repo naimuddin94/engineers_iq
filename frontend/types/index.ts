@@ -79,6 +79,7 @@ export interface IArticle {
 export interface IComment {
   _id: string;
   user: IUser;
+  article: string;
   content: string;
   claps: string[];
   createdAt: string;

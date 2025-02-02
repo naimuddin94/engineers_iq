@@ -10,8 +10,9 @@ import {
   deleteComment,
   fetchArticle,
   fetchArticles,
+  updateComment,
 } from "@/services/ArticleService";
-import { IArticle, IFilterOptions, IResponse } from "@/types";
+import { IArticle, IComment, IFilterOptions, IResponse } from "@/types";
 
 export const useCreateArticle = () => {
   return useMutation<any, Error, FormData>({
@@ -81,12 +82,25 @@ export const useRemoveComment = () => {
   return useMutation<IResponse<IArticle>, Error, string>({
     mutationKey: ["COMMENTS"],
     mutationFn: async (commentId) => await deleteComment(commentId),
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["COMMENTS"] });
-      toast.success(data?.message);
     },
-    onError: (error) => {
-      toast.error(error.message);
+  });
+};
+
+export const useUpdateComment = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<
+    IResponse<IComment>,
+    Error,
+    { commentId: string; content: string }
+  >({
+    mutationKey: ["COMMENTS"],
+    mutationFn: async (payload) =>
+      await updateComment(payload.commentId, payload.content),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["COMMENTS"] });
     },
   });
 };

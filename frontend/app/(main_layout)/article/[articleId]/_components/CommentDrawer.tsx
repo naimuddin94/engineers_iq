@@ -10,7 +10,11 @@ import IQForm from "@/components/form/IQForm";
 import IQTextarea from "@/components/form/IQTextArea";
 import UserName from "@/components/premium_acc_badge";
 import { useUser } from "@/context/user.provider";
-import { useAddComment, useRemoveComment } from "@/hooks/article.hook";
+import {
+  useAddComment,
+  useRemoveComment,
+  useUpdateComment,
+} from "@/hooks/article.hook";
 import { IComment } from "@/types";
 import formatDateReadable from "@/utils/format_date_readable";
 
@@ -44,19 +48,45 @@ export default function CommentDrawer({
     addCommentFN({ content: data.content, articleId });
   };
 
+  // For edit comments
+  const { mutate: commentUpdateFN } = useUpdateComment();
+
+  const handleEditComment = async (commentId: string) => {
+    if (!commentUpdatedContent) {
+      setCommentUpdateAction(null);
+
+      return;
+    }
+
+    const toastId = toast.loading("Updating comment....", {
+      position: "bottom-left",
+    });
+
+    commentUpdateFN(
+      { commentId, content: commentUpdatedContent },
+      {
+        onSuccess: function (data) {
+          toast.success(data?.message, {
+            id: toastId,
+            position: "bottom-left",
+          });
+          // Reset edit state
+          setCommentUpdateAction(null);
+          setCommentUpdatedContent(null);
+        },
+        onError: function (error) {
+          toast.error(error?.message, { id: toastId, position: "bottom-left" });
+        },
+      },
+    );
+  };
+
+  // For liked comment
   const handleLikeComment = async (commentId: string) => {
     if (!user) {
       toast.error("You are not logged in", {
         position: "bottom-left",
       });
-
-      return;
-    }
-  };
-
-  const handleEditComment = async (commentId: string) => {
-    if (!commentUpdatedContent) {
-      setCommentUpdateAction(null);
 
       return;
     }
