@@ -12,6 +12,7 @@ import UserName from "@/components/premium_acc_badge";
 import { useUser } from "@/context/user.provider";
 import {
   useAddComment,
+  useClapOnComment,
   useRemoveComment,
   useUpdateComment,
 } from "@/hooks/article.hook";
@@ -82,6 +83,8 @@ export default function CommentDrawer({
   };
 
   // For liked comment
+  const { mutate: commentClapFN } = useClapOnComment();
+
   const handleLikeComment = async (commentId: string) => {
     if (!user) {
       toast.error("You are not logged in", {
@@ -90,6 +93,8 @@ export default function CommentDrawer({
 
       return;
     }
+
+    commentClapFN(commentId);
   };
 
   // For removing comment

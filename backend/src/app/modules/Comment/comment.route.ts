@@ -15,7 +15,7 @@ router
 
 router
   .route('/claps/:commentId')
-  .post(auth('ADMIN', 'USER'), CommentController.clapsOnComment);
+  .patch(auth('ADMIN', 'USER'), CommentController.clapsOnComment);
 
 router
   .route('/remove/:commentId')

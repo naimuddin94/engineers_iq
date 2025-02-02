@@ -145,3 +145,22 @@ export const updateComment = async (commentId: string, content: string) => {
     throw new Error(error?.response?.data?.message);
   }
 };
+
+export const clapOnComment = async (commentId: string) => {
+  try {
+    const data = await fetchAPI<IResponse<IComment>>(
+      `/comments/claps/${commentId}`,
+      {
+        method: "PATCH",
+      },
+    );
+
+    if (data?.success) {
+      revalidateTag(`article-${data.data?.article}`);
+    }
+
+    return data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message);
+  }
+};

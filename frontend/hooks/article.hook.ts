@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import {
   addComment,
   clapOnArticle,
+  clapOnComment,
   createArticle,
   deleteComment,
   fetchArticle,
@@ -102,5 +103,12 @@ export const useUpdateComment = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["COMMENTS"] });
     },
+  });
+};
+
+export const useClapOnComment = () => {
+  return useMutation<IResponse<IComment>, Error, string>({
+    mutationKey: ["COMMENT_CLAP"],
+    mutationFn: async (articleId) => await clapOnComment(articleId),
   });
 };

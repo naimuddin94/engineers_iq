@@ -1,5 +1,5 @@
 import status from 'http-status';
-import mongoose, { ObjectId } from 'mongoose';
+import mongoose from 'mongoose';
 import { verifyToken } from '../../lib';
 import { AppError } from '../../utils';
 import Article from '../Article/article.model';
@@ -59,8 +59,6 @@ const saveCommentIntoDB = async (
 const clapsOnComment = async (commentId: string, token: string) => {
   const comment = await Comment.findById(commentId);
 
-  console.log('from 62', commentId);
-
   if (!comment) {
     throw new AppError(status.NOT_FOUND, 'Comment not exist!');
   }
@@ -74,7 +72,9 @@ const clapsOnComment = async (commentId: string, token: string) => {
   }
 
   // Toggle clap using atomic operations
-  const hasClapped = comment.claps.includes(user._id as ObjectId);
+  const hasClapped = comment.claps.some(
+    (uuid) => uuid.toString() === user._id.toString()
+  );
 
   const update = hasClapped
     ? { $pull: { claps: user._id } }

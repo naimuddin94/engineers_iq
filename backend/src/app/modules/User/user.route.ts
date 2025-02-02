@@ -11,7 +11,6 @@ const router = Router();
 router
   .route('/signup')
   .post(
-    upload.single('image'),
     validateRequest(UserValidation.createUserValidationSchema),
     UserController.signup
   );

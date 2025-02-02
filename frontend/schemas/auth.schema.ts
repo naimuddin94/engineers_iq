@@ -17,14 +17,6 @@ const signinSchema = z.object({
 });
 
 const signupSchema = z.object({
-  image: z.any({ message: "Image is required" }).refine(
-    (file) => {
-      return file && file.size <= 500 * 1024;
-    },
-    {
-      message: "Image size must be under 500 KB",
-    },
-  ),
   name: z
     .string({
       required_error: "Name is required",
@@ -78,3 +70,12 @@ export const AuthValidation = {
   signupSchema,
   passwordChangeSchema,
 };
+
+// image: z.any({ message: "Image is required" }).refine(
+//     (file) => {
+//       return file && file.size <= 500 * 1024;
+//     },
+//     {
+//       message: "Image size must be under 500 KB",
+//     },
+//   ),

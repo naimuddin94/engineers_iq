@@ -8,14 +8,17 @@ import { FieldValues } from "react-hook-form";
 import { fetchAPI } from "@/lib/fetch";
 import { IResponse, IUser } from "@/types";
 
-export const signupUser = async (userData: FormData) => {
+export const signupUser = async (userData: FieldValues) => {
   try {
     const cookieStore = await cookies();
     const data = await fetchAPI<
       IResponse<IUser & { accessToken: string; refreshToken: string }>
     >("/auth/signup", {
       method: "POST",
-      body: userData,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
     });
 
     if (data?.success) {

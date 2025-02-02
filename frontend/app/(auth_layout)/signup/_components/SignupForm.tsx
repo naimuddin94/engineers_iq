@@ -8,7 +8,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FieldValues } from "react-hook-form";
 
-import IQFileInput from "@/components/form/IQFileInput";
 import IQForm from "@/components/form/IQForm";
 import IQInput from "@/components/form/IQInput";
 import Loading from "@/components/loading";
@@ -29,13 +28,7 @@ const SignupForm = () => {
     typeof window !== "undefined" ? searchParams.get("redirect") : null;
 
   const handleSignup = async (data: FieldValues) => {
-    const formData = new FormData();
-
-    for (const key in data) {
-      formData.append(key, data[key]);
-    }
-
-    signupFn(formData);
+    signupFn(data);
     userLoading(true);
   };
 
@@ -57,14 +50,6 @@ const SignupForm = () => {
         resolver={AuthValidation.signupSchema}
         onSubmit={handleSignup}
       >
-        <motion.div
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0 }}
-          initial={{ opacity: 0, y: -50 }}
-          transition={{ delay: 0.6 }}
-        >
-          <IQFileInput name="image" />
-        </motion.div>
         <motion.div
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}

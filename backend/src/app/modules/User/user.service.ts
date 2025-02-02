@@ -8,29 +8,14 @@ import {
   IUser,
 } from '../User/user.interface';
 import User from '../User/user.model';
-import { USER_ROLE } from './user.constant';
 
 // Save new user information in the database
 const saveUserIntoDB = async (
   userData: Pick<
     IUser,
     'name' | 'email' | 'password' | 'username' | 'image' | 'role'
-  >,
-
-  // eslint-disable-next-line no-undef
-  file: Express.Multer.File | undefined,
-  token: string
+  >
 ) => {
-  if (token) {
-    const { role } = await verifyToken(token);
-    if (userData?.role && role !== USER_ROLE.ADMIN) {
-      userData['role'] = USER_ROLE.USER;
-    }
-  } else {
-    if (userData?.role) {
-      userData['role'] = USER_ROLE.USER;
-    }
-  }
   const isUserExists = await User.isUserExists(userData.email);
 
   if (isUserExists) {
@@ -41,13 +26,6 @@ const saveUserIntoDB = async (
 
   if (isUsernameExists) {
     throw new AppError(status.BAD_REQUEST, 'Username already exists!');
-  }
-
-  if (file) {
-    const imageUrl = await fileUploadOnCloudinary(file.buffer);
-    if (imageUrl) {
-      userData.image = imageUrl;
-    }
   }
 
   const result = await User.create(userData);

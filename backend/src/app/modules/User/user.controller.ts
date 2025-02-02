@@ -5,10 +5,9 @@ import { UserService } from './user.service';
 
 const signup = asyncHandler(async (req, res) => {
   const payload = req.body;
-  const file = req.file;
-  const { accessToken: requestAccessToken } = req.cookies;
+
   const { response, accessToken, refreshToken } =
-    await UserService.saveUserIntoDB(payload, file, requestAccessToken);
+    await UserService.saveUserIntoDB(payload);
 
   res
     .status(status.CREATED)
