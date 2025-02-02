@@ -64,7 +64,7 @@ export default function AboutUs() {
   const router = useRouter();
 
   const handlePushSignin = () => {
-    router.push("/signin");
+    router.push("/signup");
   };
 
   // Intersection Observer for the "What We Offer" section

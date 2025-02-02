@@ -141,6 +141,10 @@ const fetchArticleFromDB = async (articleId: string) => {
         select: 'name image username',
       },
     },
+    {
+      path: 'author',
+      select: 'name image username',
+    },
   ]);
 
   if (!article) {

@@ -2,7 +2,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 
 interface formConfig {
@@ -35,9 +35,12 @@ export default function IQForm({
 
   const methods = useForm(formConfig);
 
-  if (methods.formState.isSubmitSuccessful) {
-    methods.reset();
-  }
+  // Reset the form safely inside useEffect after submission
+  useEffect(() => {
+    if (methods.formState.isSubmitSuccessful) {
+      methods.reset();
+    }
+  }, [methods.formState.isSubmitSuccessful, methods.reset]);
 
   const submitHandler = methods.handleSubmit;
 

@@ -46,6 +46,13 @@ export default function CommentDrawer({
   const { mutate: addCommentFN, isPending } = useAddComment();
 
   const handleAddComment = async (data: FieldValues) => {
+    if (!user) {
+      toast.error("You are not logged in", {
+        position: "bottom-left",
+      });
+
+      return;
+    }
     addCommentFN({ content: data.content, articleId });
   };
 
@@ -238,7 +245,7 @@ export default function CommentDrawer({
                               >
                                 {comment.claps.length}
                               </Button>
-                              {user?._id === author && (
+                              {user?.id === author && (
                                 <Button
                                   isIconOnly
                                   className={`mt-2 p-0 text-danger`}

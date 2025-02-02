@@ -239,6 +239,7 @@ export default function ArticleDetail({ article }: { article: IArticle }) {
                 />
               }
               variant="light"
+              onPress={handleClap}
             >
               {article?.claps.length}
             </Button>
@@ -247,11 +248,12 @@ export default function ArticleDetail({ article }: { article: IArticle }) {
               size="sm"
               startContent={<MessageCircle className="w-5 h-5" />}
               variant="light"
+              onPress={() => setIsCommentDrawerOpen(!isCommentDrawerOpen)}
             >
               {article?.comments.length}
             </Button>
 
-            <Button size="sm" variant="light">
+            <Button size="sm" variant="light" onPress={() => onOpen()}>
               <Share className="w-5 h-5" />
             </Button>
 
@@ -259,6 +261,7 @@ export default function ArticleDetail({ article }: { article: IArticle }) {
               size="sm"
               startContent={<Bookmark className="w-5 h-5" />}
               variant="light"
+              onPress={handleDownload}
             />
           </div>
         </motion.div>
