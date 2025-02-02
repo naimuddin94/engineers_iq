@@ -123,8 +123,31 @@ const deleteCommentIntoDB = async (accessToken: string, commentId: string) => {
   }
 };
 
+const updateCommentIntoDB = async (
+  accessToken: string,
+  commentId: string,
+  content: string
+) => {
+  const { id } = await verifyToken(accessToken);
+
+  const isOwner = await Comment.exists({ _id: commentId, user: id });
+
+  if (!isOwner) {
+    throw new AppError(status.BAD_REQUEST, 'You are not allowed');
+  }
+
+  const result = await Comment.findByIdAndUpdate(
+    commentId,
+    { content },
+    { new: true }
+  );
+
+  return result;
+};
+
 export const CommentService = {
   saveCommentIntoDB,
   clapsOnComment,
   deleteCommentIntoDB,
+  updateCommentIntoDB,
 };

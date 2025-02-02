@@ -21,4 +21,8 @@ router
   .route('/remove/:commentId')
   .delete(auth('ADMIN', 'USER'), CommentController.deleteComment);
 
+router
+  .route('/edit/:commentId')
+  .patch(auth('ADMIN', 'USER'), CommentController.updateComment);
+
 export const CommentRoutes = router;
