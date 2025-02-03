@@ -18,7 +18,7 @@ import {
 import { useAnalytics } from "@/hooks/auth.hook";
 
 export const Analytics = ({ userId }: { userId: string }) => {
-  const { data, isLoading, error } = useAnalytics(userId);
+  const { data, error } = useAnalytics(userId);
 
   const { theme } = useTheme();
 

@@ -15,11 +15,16 @@ import Loading from "@/components/loading";
 import Editor from "@/components/module/new/Editor";
 import { useCreateArticle } from "@/hooks/article.hook";
 import { ArticleValidation } from "@/schemas/article.schema";
+import { IArticle } from "@/types";
 // Import the Quill Snow theme
 
-export default function ArticleForm() {
+export default function ArticleForm({
+  article,
+}: {
+  article: IArticle | undefined;
+}) {
   const [content, setContent] = useState(
-    "Write details description for your article.......",
+    article?.textarea || "Write details description for your article.......",
   );
   const router = useRouter();
   const {
@@ -57,9 +62,10 @@ export default function ArticleForm() {
     }
 
     // Send the form data to the backend
-    createArticleFN(formData);
-  };
+    // createArticleFN(formData);
 
+    console.log(data);
+  };
 
   useEffect(() => {
     if (!error && isSuccess) {
@@ -70,19 +76,24 @@ export default function ArticleForm() {
   return (
     <>
       {isPending && <Loading />}
-      <IQForm resolver={ArticleValidation.createSchema} onSubmit={onSubmit}>
+      <IQForm
+        defaultValues={article}
+        resolver={ArticleValidation.createSchema}
+        onSubmit={onSubmit}
+      >
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-6">
           <IQImageForm
+            defaultValue={article?.image}
             label="Article image"
             name="image"
             placeholder="Upload an image for your article."
           />
-          <ArticleInfoForm />
+          <ArticleInfoForm article={article} />
         </div>
         <Editor content={content} setContent={setContent} />
         <div className="flex justify-end mt-5">
           <Button size="lg" type="submit" variant="faded">
-            Save Article
+            {article ? "Update" : "Save Article"}
           </Button>
         </div>
       </IQForm>

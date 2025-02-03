@@ -7,8 +7,13 @@ import IQInput from "@/components/form/IQInput";
 import IQSelect from "@/components/form/IQSelect";
 import { categoriesData } from "@/const/article/categories";
 import { topicsOptions } from "@/const/article/topics";
+import { IArticle } from "@/types";
 
-export default function ArticleInfoForm() {
+export default function ArticleInfoForm({
+  article,
+}: {
+  article: IArticle | undefined;
+}) {
   return (
     <div className="col-span-2 lg:col-span-2">
       <Card className="p-3 h-full">
@@ -25,10 +30,14 @@ export default function ArticleInfoForm() {
               <IQSelect
                 label="Category"
                 name="category"
-                options={categoriesData}
+                options={categoriesData.map((category) => ({
+                  key: category,
+                  label: category,
+                }))}
               />
             </div>
             <IQSelect
+              defaultValue={article?.topics}
               label="Topics"
               multiple="multiple"
               name="topics"
