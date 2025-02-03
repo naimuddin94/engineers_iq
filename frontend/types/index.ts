@@ -19,7 +19,7 @@ export interface IInputProps {
   placeholder?: string;
   startContent?: ReactNode;
   endContent?: ReactNode;
-  defaultValue?: string | null;
+  defaultValue?: any;
   className?: string;
 }
 

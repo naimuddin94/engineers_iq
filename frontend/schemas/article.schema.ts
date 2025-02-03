@@ -29,6 +29,10 @@ const createSchema = z.object({
   ),
   image: z.any({ message: "Image is required" }).refine(
     (file) => {
+      if (!file || typeof file === "string") {
+        return true;
+      }
+
       return file && file.size <= 1024 * 1024;
     },
     {
