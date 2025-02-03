@@ -29,6 +29,7 @@ import { getCurrentUser } from "@/services/AuthService";
 import { IUser } from "@/types";
 
 export default function HandleProfileInfo({ user }: { user: IUser }) {
+  const { user: currentUser } = useUser();
   const [nameChangedAction, setNameChangedAction] = useState(false);
   const [updatedName, setUpdatedName] = useState(user.name);
   const [isAlreadyFollowed, setIsAlreadyFollowed] = useState(false);
@@ -94,6 +95,9 @@ export default function HandleProfileInfo({ user }: { user: IUser }) {
   const { mutate: followingFN } = useToggleFollowing();
 
   function handleFollowing() {
+    if (!currentUser) {
+      return toast.error("You have to login first");
+    }
     const toastId = toast.loading("Following...");
 
     followingFN(user._id, {

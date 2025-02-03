@@ -8,7 +8,7 @@ import { useState } from "react";
 
 import { Analytics } from "./Analytics";
 
-import ArticleCard from "@/components/shared/ArticleCard";
+import ProfileArticleCard from "@/components/shared/ProfileArticleCard";
 import CardSkeleton from "@/components/shared/Skeleton";
 import { useUser } from "@/context/user.provider";
 import { useGetArticles } from "@/hooks/article.hook";
@@ -16,13 +16,8 @@ import { IUser } from "@/types";
 
 export default function ProfileArticles({ user }: { user: IUser }) {
   const { user: currentUser } = useUser();
-  const [render, setRender] = useState<
-    "home" | "analytics" | "user" | "payout"
-  >("home");
+
   const [selectedCategory, setCategory] = useState<string>("");
-  const [isWonProfile, setIsWonProfile] = useState<boolean>(
-    currentUser?.id === user?._id,
-  );
 
   const { data, isLoading, error } = useGetArticles({ author: user?._id });
 
@@ -47,7 +42,7 @@ export default function ProfileArticles({ user }: { user: IUser }) {
                     delay: (idx + 1) * 0.2,
                   }}
                 >
-                  <ArticleCard article={article} />
+                  <ProfileArticleCard article={article} />
                 </motion.div>
               ))
             ) : (

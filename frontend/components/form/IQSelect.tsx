@@ -18,6 +18,7 @@ export default function IQSelect({
   variant = "bordered",
   disabled,
   multiple,
+  defaultValue,
 }: IProps) {
   const {
     register,
@@ -28,6 +29,7 @@ export default function IQSelect({
     <Select
       {...register(name)}
       className="min-w-full sm:min-w-[225px]"
+      defaultSelectedKeys={defaultValue}
       errorMessage={errors[name] ? (errors[name]?.message as string) : ""}
       isDisabled={disabled}
       isInvalid={errors[name] ? true : false}
