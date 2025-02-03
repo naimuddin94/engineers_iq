@@ -112,20 +112,18 @@ export default function Home() {
                         <Chip
                           className="hover:cursor-pointer"
                           color={
-                            selectedCategory === category.key
+                            selectedCategory === category
                               ? "primary"
                               : "default"
                           }
                           variant="flat"
                           onClick={() =>
                             setCategory(
-                              category.key === selectedCategory
-                                ? ""
-                                : category.key,
+                              category === selectedCategory ? "" : category,
                             )
                           }
                         >
-                          {category.label}
+                          {category}
                         </Chip>
                       </motion.div>
                     ))}

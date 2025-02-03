@@ -2,6 +2,8 @@
 
 import ArticleForm from "./_components/ArticleForm";
 
+import { fetchArticle } from "@/services/ArticleService";
+
 type Params = Promise<{ slug: string }>;
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
@@ -11,6 +13,8 @@ async function AddProduct(props: {
 }) {
   const searchParams = await props.searchParams;
 
+  const { data } = await fetchArticle(searchParams.article as string);
+
   return (
     <section className="grid gap-6 px-4 py-8 mx-auto max-w-6xl sm:px-6 lg:px-8">
       <div className="flex items-center justify-between">
@@ -18,7 +22,7 @@ async function AddProduct(props: {
           Create new article
         </h1>
       </div>
-      <ArticleForm />
+      <ArticleForm article={data} />
     </section>
   );
 }
