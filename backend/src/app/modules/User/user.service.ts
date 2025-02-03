@@ -279,23 +279,59 @@ const getUserAnalyticsFromDB = async (authorId: string) => {
   const result = await Article.aggregate([
     { $match: { author: new mongoose.Types.ObjectId(authorId) } },
     {
+      $project: {
+        monthYear: { $dateToString: { format: '%Y-%m', date: '$createdAt' } },
+        clapsCount: { $size: { $ifNull: ['$claps', []] } },
+        commentsCount: { $size: { $ifNull: ['$comments', []] } },
+        views: { $ifNull: ['$views', 0] },
+        title: 1,
+      },
+    },
+    {
       $group: {
-        _id: null,
+        _id: '$monthYear',
         totalPosts: { $sum: 1 },
         totalPostViews: { $sum: '$views' },
-        totalClaps: { $sum: { $size: '$claps' } },
-        totalComments: { $sum: { $size: '$comments' } },
-        averagePostsPerMonth: {
-          $avg: {
-            $let: {
-              vars: {
-                postMonth: { $month: '$createdAt' },
-                postYear: { $year: '$createdAt' },
-              },
-              in: 1,
-            },
+        totalClaps: { $sum: '$clapsCount' },
+        totalComments: { $sum: '$commentsCount' },
+        articlesSummary: {
+          $push: {
+            title: '$title',
+            views: '$views',
+            claps: '$clapsCount',
+            comments: '$commentsCount',
           },
         },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        totalPosts: { $sum: '$totalPosts' },
+        totalPostViews: { $sum: '$totalPostViews' },
+        totalClaps: { $sum: '$totalClaps' },
+        totalComments: { $sum: '$totalComments' },
+        totalMonths: { $sum: 1 },
+        averagePostsPerMonth: { $avg: '$totalPosts' },
+        articlesSummary: { $push: '$articlesSummary' },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        totalPosts: 1,
+        totalPostViews: 1,
+        totalClaps: 1,
+        totalComments: 1,
+        totalMonths: 1,
+        averagePostsPerMonth: 1,
+        articlesSummary: {
+          $reduce: {
+            input: '$articlesSummary',
+            initialValue: [],
+            in: { $concatArrays: ['$$value', '$$this'] },
+          },
+        }, // Flatten array
       },
     },
   ]);
@@ -307,7 +343,9 @@ const getUserAnalyticsFromDB = async (authorId: string) => {
         totalPostViews: 0,
         totalClaps: 0,
         totalComments: 0,
+        totalMonths: 0,
         averagePostsPerMonth: 0,
+        articlesSummary: [],
       };
 };
 

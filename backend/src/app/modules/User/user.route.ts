@@ -50,6 +50,6 @@ router
   .route('/following/:userId')
   .patch(auth('ADMIN', 'USER'), UserController.toggleFollower);
 
-router.route('/analytics/:userId').patch(UserController.getAnalytics);
+router.route('/analytics/:userId').get(UserController.getAnalytics);
 
 export const UserRoutes = router;

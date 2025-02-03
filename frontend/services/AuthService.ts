@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 import { FieldValues } from "react-hook-form";
 
 import { fetchAPI } from "@/lib/fetch";
-import { IResponse, IUser } from "@/types";
+import { IAnalytics, IResponse, IUser } from "@/types";
 
 export const signupUser = async (userData: FieldValues) => {
   try {
@@ -87,7 +87,7 @@ export const changeFullname = async (name: string) => {
 
 export const changePassword = async (payload: FieldValues) => {
   try {
-    const { data } = await fetchAPI<IResponse<IUser>>("/auth/change-password", {
+    const data = await fetchAPI<IResponse<IUser>>("/auth/change-password", {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -123,6 +123,23 @@ export const getProfile = async (
         tags: ["PROFILE"],
       },
     });
+
+    return data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message);
+  }
+};
+
+export const userAnalytics = async (userId: string) => {
+  try {
+    const data = await fetchAPI<IResponse<IAnalytics>>(
+      `/auth/analytics/${userId}`,
+      {
+        next: {
+          tags: ["ANALYTICS"],
+        },
+      },
+    );
 
     return data;
   } catch (error: any) {

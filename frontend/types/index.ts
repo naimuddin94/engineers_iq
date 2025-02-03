@@ -99,3 +99,20 @@ export interface IUser {
   followers: Pick<IUser, "_id" | "name" | "image" | "username" | "premium">[];
   following: Pick<IUser, "_id" | "name" | "image" | "username" | "premium">[];
 }
+
+export interface IAnalytics {
+  totalPosts: number;
+  totalPostViews: number;
+  totalClaps: number;
+  totalComments: number;
+  totalMonths: number;
+  averagePostsPerMonth: number;
+  articlesSummary: IArticlesSummary[];
+}
+
+export interface IArticlesSummary {
+  title: string;
+  views: number;
+  claps: number;
+  comments: number;
+}

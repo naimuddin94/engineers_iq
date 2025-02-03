@@ -12,9 +12,10 @@ import {
   signinUser,
   signupUser,
   toggleFollowing,
+  userAnalytics,
 } from "../services/AuthService";
 
-import { IResponse, IUser } from "@/types";
+import { IAnalytics, IResponse, IUser } from "@/types";
 
 // User Signup Mutation
 export const useUserSignup = () => {
@@ -78,7 +79,7 @@ export const useChangeProfileImage = () => {
 export const useToggleFollowing = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<IResponse<string[]>, Error, string>({
+  return useMutation<IResponse<IUser>, Error, string>({
     mutationKey: ["FOLLOWING"],
     mutationFn: async (userId) => await toggleFollowing(userId),
     onSuccess: () => {
@@ -92,5 +93,12 @@ export const useUserProfile = (username: string) => {
   return useQuery<IResponse<IUser>>({
     queryKey: ["PROFILE"],
     queryFn: () => getProfile(username),
+  });
+};
+
+export const useAnalytics = (userId: string) => {
+  return useQuery<IResponse<IAnalytics>>({
+    queryKey: ["GET_ANALYTICS"],
+    queryFn: () => userAnalytics(userId),
   });
 };
