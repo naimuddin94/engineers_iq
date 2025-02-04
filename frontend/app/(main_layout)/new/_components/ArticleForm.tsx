@@ -36,35 +36,30 @@ export default function ArticleForm({
 
   // Save a new product to the database
   const onSubmit = async (data: FieldValues) => {
-    const formData = new FormData();
-
-    // Check if the content length is valid
-    if (content?.length < 500) {
+    if (!content || content.length < 500) {
       return toast.error("Description is too short");
     }
 
-    // Append content as a string to formData
-    formData.append("textarea", content);
+    const formData = new FormData();
 
-    // Loop over topics array and append each topic separately
-    if (Array.isArray(data.topics)) {
-      data.topics.forEach((topic: string) => {
-        formData.append("topics[]", topic);
-      });
+    if (article?.textarea !== content) {
+      formData.append("textarea", content);
     }
 
-    // Append other form data
-    for (const key in data) {
-      if (key !== "topics") {
-        // Avoid appending topics again
-        formData.append(key, data[key]);
+    // Append topics as individual formData entries
+    data.topics?.forEach((topic: string) => formData.append("topics[]", topic));
+
+    // Append all other fields, skipping image if it's a string
+    Object.entries(data).forEach(([key, value]) => {
+      if (key !== "topics" && !(key === "image" && typeof value === "string")) {
+        formData.append(key, value);
       }
-    }
+    });
 
-    // Send the form data to the backend
-    // createArticleFN(formData);
+    // Send to backend
+    // await createArticleFN(formData);
 
-    console.log(data);
+    console.log({ data, formData: Object.fromEntries(formData.entries()) });
   };
 
   useEffect(() => {
