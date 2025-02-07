@@ -11,6 +11,7 @@ import {
   deleteComment,
   fetchArticle,
   fetchArticles,
+  updateArticle,
   updateComment,
 } from "@/services/ArticleService";
 import { IArticle, IComment, IFilterOptions, IResponse } from "@/types";
@@ -19,6 +20,20 @@ export const useCreateArticle = () => {
   return useMutation<any, Error, FormData>({
     mutationKey: ["CREATE_ARTICLE"],
     mutationFn: async (articleData) => await createArticle(articleData),
+    onSuccess: (data) => {
+      toast.success(data?.message);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+};
+
+export const useUpdateArticle = () => {
+  return useMutation<any, Error, { articleId: string; updateData: FormData }>({
+    mutationKey: ["UPDATE_ARTICLE"],
+    mutationFn: async ({ articleId, updateData }) =>
+      await updateArticle(articleId, updateData),
     onSuccess: (data) => {
       toast.success(data?.message);
     },
