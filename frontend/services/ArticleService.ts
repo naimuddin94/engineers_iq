@@ -30,6 +30,26 @@ export const createArticle = async (articleData: FormData) => {
   }
 };
 
+export const updateArticle = async (
+  articleId: string,
+  updateData: FormData,
+) => {
+  try {
+    const data = await fetchAPI<IResponse<IArticle>>(`/articles/${articleId}`, {
+      method: "PATCH",
+      body: updateData,
+    });
+
+    if (data?.success) {
+      revalidateTag(`articles-${data?.data?._id}`);
+    }
+
+    return data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message);
+  }
+};
+
 export const fetchArticles = async (params: IFilterOptions) => {
   try {
     // Build query string dynamically
