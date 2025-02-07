@@ -13,7 +13,7 @@ import IQForm from "@/components/form/IQForm";
 import IQImageForm from "@/components/form/IQImageForm";
 import Loading from "@/components/loading";
 import Editor from "@/components/module/new/Editor";
-import { useCreateArticle } from "@/hooks/article.hook";
+import { useCreateArticle, useUpdateArticle } from "@/hooks/article.hook";
 import { ArticleValidation } from "@/schemas/article.schema";
 import { IArticle } from "@/types";
 // Import the Quill Snow theme
@@ -33,6 +33,13 @@ export default function ArticleForm({
     error,
     isSuccess,
   } = useCreateArticle();
+
+  const {
+    mutate: updateArticleFN,
+    isPending: updatePending,
+    error: updateError,
+    isSuccess: updateSuccess,
+  } = useUpdateArticle();
 
   // Save a new product to the database
   const onSubmit = async (data: FieldValues) => {
@@ -56,21 +63,24 @@ export default function ArticleForm({
       }
     });
 
-    // Send to backend
-    // await createArticleFN(formData);
-
-    console.log({ data, formData: Object.fromEntries(formData.entries()) });
+    if (article) {
+      updateArticleFN({ articleId: article._id, updateData: formData });
+    } else {
+      createArticleFN(formData);
+    }
   };
 
   useEffect(() => {
     if (!error && isSuccess) {
       router.push("/");
+    } else if (!updateError && updateSuccess) {
+      router.push(`/profile/${article?.author?.username}`);
     }
-  }, [isSuccess]);
+  }, [isSuccess, updateSuccess]);
 
   return (
     <>
-      {isPending && <Loading />}
+      {isPending || (updatePending && <Loading />)}
       <IQForm
         defaultValues={article}
         resolver={ArticleValidation.createSchema}
