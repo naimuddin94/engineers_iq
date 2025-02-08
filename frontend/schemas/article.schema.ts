@@ -30,6 +30,7 @@ const createSchema = z.object({
   image: z.any({ message: "Image is required" }).refine(
     (file) => {
       if (!file || typeof file === "string") {
+        // here off validation for when update article
         return true;
       }
 
