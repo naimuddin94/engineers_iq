@@ -4,9 +4,11 @@
 import { Button } from "@nextui-org/button";
 import { Card, CardBody, CardFooter } from "@nextui-org/card";
 import { Chip } from "@nextui-org/chip";
-import { Edit, Trash } from "lucide-react";
+import { Edit } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+
+import DeleteModal from "./DeleteModal";
 
 import { useUser } from "@/context/user.provider";
 import { IArticle } from "@/types";
@@ -69,9 +71,7 @@ export default function ProfileArticleCard({ article }: IProps) {
           <Button isIconOnly size="sm" onPress={updateArticle}>
             <Edit className="text-primary" size={18} />
           </Button>
-          <Button isIconOnly size="sm">
-            <Trash className="text-danger" size={18} />
-          </Button>
+          <DeleteModal articleId={article._id} />
         </CardFooter>
       )}
     </Card>

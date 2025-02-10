@@ -184,3 +184,19 @@ export const clapOnComment = async (commentId: string) => {
     throw new Error(error?.response?.data?.message);
   }
 };
+
+export const deleteArticle = async (articleId: string) => {
+  try {
+    const data = await fetchAPI<IResponse<null>>(`/articles/${articleId}`, {
+      method: "DELETE",
+    });
+
+    if (data?.success) {
+      revalidateTag("articles");
+    }
+
+    return data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message);
+  }
+};

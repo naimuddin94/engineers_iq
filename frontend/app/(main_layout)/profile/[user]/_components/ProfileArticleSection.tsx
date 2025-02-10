@@ -4,7 +4,7 @@
 import { Chip } from "@nextui-org/chip";
 import { motion } from "framer-motion";
 import { FileX } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { Analytics } from "./Analytics";
@@ -18,7 +18,7 @@ import { useGetArticles } from "@/hooks/article.hook";
 import { IUser } from "@/types";
 
 export default function ProfileArticlesSection({ user }: { user: IUser }) {
-  const { user: currentUser } = useUser();
+  const { user: currentUser, isLoading: userLoading } = useUser();
   const [render, setRender] = useState<
     "home" | "analytics" | "user" | "payout"
   >("home");
@@ -27,6 +27,12 @@ export default function ProfileArticlesSection({ user }: { user: IUser }) {
     currentUser?.id === user?._id,
   );
   const { data, isLoading, error } = useGetArticles({});
+
+  useEffect(() => {
+    if (currentUser?.id === user?._id) {
+      setIsWonProfile(true);
+    }
+  }, [userLoading]);
 
   return (
     <div className="lg:order-1 lg:col-span-2 order-2">

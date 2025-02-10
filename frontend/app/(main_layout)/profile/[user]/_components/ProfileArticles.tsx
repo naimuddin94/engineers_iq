@@ -4,21 +4,15 @@
 import { Tab, Tabs } from "@heroui/tabs";
 import { motion } from "framer-motion";
 import { FileX } from "lucide-react";
-import { useState } from "react";
 
 import { Analytics } from "./Analytics";
 
 import ProfileArticleCard from "@/components/shared/ProfileArticleCard";
 import CardSkeleton from "@/components/shared/Skeleton";
-import { useUser } from "@/context/user.provider";
 import { useGetArticles } from "@/hooks/article.hook";
 import { IUser } from "@/types";
 
 export default function ProfileArticles({ user }: { user: IUser }) {
-  const { user: currentUser } = useUser();
-
-  const [selectedCategory, setCategory] = useState<string>("");
-
   const { data, isLoading, error } = useGetArticles({ author: user?._id });
 
   return (

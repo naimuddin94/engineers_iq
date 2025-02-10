@@ -8,6 +8,7 @@ import {
   clapOnArticle,
   clapOnComment,
   createArticle,
+  deleteArticle,
   deleteComment,
   fetchArticle,
   fetchArticles,
@@ -125,5 +126,17 @@ export const useClapOnComment = () => {
   return useMutation<IResponse<IComment>, Error, string>({
     mutationKey: ["COMMENT_CLAP"],
     mutationFn: async (articleId) => await clapOnComment(articleId),
+  });
+};
+
+export const useRemoveArticle = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<IResponse<null>, Error, string>({
+    mutationKey: ["DELETE_ARTICLE"],
+    mutationFn: async (articleId) => await deleteArticle(articleId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["GET_ARTICLES"] });
+    },
   });
 };
