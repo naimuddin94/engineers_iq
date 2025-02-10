@@ -7,7 +7,7 @@ import { FileX } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-import Analytics from "./Analytics";
+import { Analytics } from "./Analytics";
 import Users from "./Users";
 
 import ArticleCard from "@/components/shared/ArticleCard";
@@ -104,17 +104,13 @@ export default function ProfileArticlesSection({ user }: { user: IUser }) {
                 <Chip
                   key={indx}
                   className="hover:cursor-pointer"
-                  color={
-                    selectedCategory === category.key ? "primary" : "default"
-                  }
+                  color={selectedCategory === category ? "primary" : "default"}
                   variant="flat"
                   onClick={() =>
-                    setCategory(
-                      category.key === selectedCategory ? "" : category.key,
-                    )
+                    setCategory(category === selectedCategory ? "" : category)
                   }
                 >
-                  {category.label}
+                  {category}
                 </Chip>
               ))}
             </div>
@@ -152,7 +148,7 @@ export default function ProfileArticlesSection({ user }: { user: IUser }) {
           </>
         )
       ) : render === "analytics" ? (
-        <Analytics />
+        <Analytics userId={user?._id} />
       ) : (
         render === "user" && <Users />
       )}

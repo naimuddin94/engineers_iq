@@ -43,9 +43,12 @@ export default function ContactPage() {
           free to reach out to us through any of the methods below.
         </motion.p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          <motion.div className="space-y-4" variants={fadeInRight}>
-            <Card className="py-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 items-stretch">
+          <motion.div
+            className="flex flex-col gap-5 justify-between"
+            variants={fadeInRight}
+          >
+            <Card className="p-3">
               <CardBody className="flex flex-row items-center space-x-4">
                 <PhoneIcon className="h-6 w-6 text-primary" />
                 <div>
@@ -58,7 +61,7 @@ export default function ContactPage() {
               </CardBody>
             </Card>
 
-            <Card className="py-3">
+            <Card className="p-3">
               <CardBody className="flex flex-row items-center space-x-4">
                 <Mail className="h-6 w-6 text-primary" />
                 <div>
@@ -73,7 +76,7 @@ export default function ContactPage() {
               </CardBody>
             </Card>
 
-            <Card className="py-3">
+            <Card className="p-3">
               <CardBody className="flex flex-row items-center space-x-4">
                 <MapPin className="h-6 w-6 text-primary" />
                 <div>
@@ -88,7 +91,7 @@ export default function ContactPage() {
           </motion.div>
 
           <motion.div variants={fadeInRight}>
-            <Card>
+            <Card className="p-4">
               <CardBody>
                 <h2 className="text-xl font-semibold mb-4">Contact Form</h2>
                 <form className="space-y-4" onSubmit={handleSubmit}>
