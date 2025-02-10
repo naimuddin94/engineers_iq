@@ -15,14 +15,20 @@ import {
   YAxis,
 } from "recharts";
 
+import { AnalyticsSkeleton } from "./AnalyticsSkeleton";
+
 import { useAnalytics } from "@/hooks/auth.hook";
 
 export const Analytics = ({ userId }: { userId: string }) => {
-  const { data, error } = useAnalytics(userId);
+  const { data, error, isLoading } = useAnalytics(userId);
 
   const { theme } = useTheme();
 
-  if (error || !data) {
+  if (isLoading) {
+    return <AnalyticsSkeleton />;
+  }
+
+  if (error || !data?.data) {
     return (
       <div className=" h-screen flex justify-center flex-col items-center -mt-32">
         <h2 className="text-center">There is no analytics data to display!</h2>
@@ -30,7 +36,7 @@ export const Analytics = ({ userId }: { userId: string }) => {
     );
   }
 
-  const chartData = data.data?.articlesSummary.map((article, index) => ({
+  const chartData = data?.data?.articlesSummary.map((article, index) => ({
     name: `Article ${index + 1}`,
     title: article.title.split(" ").slice(0, 4).join(" ") + " ...",
     views: article.views,
