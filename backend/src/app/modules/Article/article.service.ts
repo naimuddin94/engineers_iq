@@ -156,6 +156,7 @@ const fetchArticleFromDB = async (articleId: string) => {
   return article;
 };
 
+// Handle clap on article into database
 const toggleClapIntoDB = async (accessToken: string, articleId: string) => {
   const article = await Article.findById(articleId);
 
@@ -195,10 +196,30 @@ const toggleClapIntoDB = async (accessToken: string, articleId: string) => {
   return result;
 };
 
+// Remove article from database
+const deleteArticle = async (accessToken: string, articleId: string) => {
+  const { id } = await verifyToken(accessToken);
+
+  const user = await User.findById(id);
+
+  if (!user) {
+    throw new AppError(status.BAD_REQUEST, 'User does not exist!');
+  }
+
+  const article = await Article.findByIdAndDelete(articleId);
+
+  if (!article) {
+    throw new AppError(status.NOT_FOUND, 'Article not found');
+  }
+
+  return null;
+};
+
 export const ArticleService = {
   saveArticleIntoDB,
   updateArticleInDB,
   fetchArticlesFromDB,
   fetchArticleFromDB,
   toggleClapIntoDB,
+  deleteArticle,
 };

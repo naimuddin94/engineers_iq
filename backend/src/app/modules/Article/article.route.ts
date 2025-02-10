@@ -26,7 +26,8 @@ router
     validateRequest(ArticleValidation.updateValidationSchema),
     ArticleController.updateArticle
   )
-  .get(ArticleController.getArticle);
+  .get(ArticleController.getArticle)
+  .delete(auth('ADMIN', 'USER'), ArticleController.deleteArticle);
 
 router
   .route('/claps/:articleId')

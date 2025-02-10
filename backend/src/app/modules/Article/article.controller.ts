@@ -75,10 +75,24 @@ const toggleClap = asyncHandler(async (req, res) => {
     .json(new AppResponse(httpStatus.OK, result, 'React successfully'));
 });
 
+const deleteArticle = asyncHandler(async (req, res) => {
+  const articleId = req.params.articleId;
+  const accessToken = req.cookies.accessToken;
+
+  const result = await ArticleService.deleteArticle(accessToken, articleId);
+
+  res
+    .status(httpStatus.OK)
+    .json(
+      new AppResponse(httpStatus.OK, result, 'Article deleted successfully')
+    );
+});
+
 export const ArticleController = {
   createArticle,
   updateArticle,
   getArticles,
   getArticle,
   toggleClap,
+  deleteArticle,
 };
