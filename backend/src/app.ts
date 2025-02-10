@@ -19,7 +19,7 @@ const app: Application = express();
 app.use(
   cors({
     credentials: true,
-    origin: '*',
+    origin: ['https://engineersiq.vercel.app'],
   })
 );
 app.use(cookieParser());
