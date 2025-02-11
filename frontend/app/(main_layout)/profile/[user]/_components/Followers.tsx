@@ -7,35 +7,52 @@ import { Button } from "@nextui-org/button";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
+import Loading from "@/components/loading";
 import UserName from "@/components/premium_acc_badge";
 import { useUser } from "@/context/user.provider";
-import { useUserProfile } from "@/hooks/auth.hook";
-import { getCurrentUser } from "@/services/AuthService";
+import { useToggleFollowing, useUserProfile } from "@/hooks/auth.hook";
 
 export default function Followers({ username }: { username: string }) {
   const { data } = useUserProfile(username);
+  const { user: currentUser, isLoading: userLoading } = useUser();
 
   const user = data?.data;
 
-  const [isWonProfile, setIsWonProfile] = useState<boolean>(false);
+  const [isWonProfile, setIsWonProfile] = useState<boolean>(
+    currentUser?.username === username,
+  );
   const [flowFlungDisplay, setFlowFlungDisplay] = useState<number>(5);
-  const { isLoading: userLoading } = useUser();
 
   useEffect(() => {
-    async function getUser() {
-      const currentUser = await getCurrentUser();
-
-      if (currentUser && currentUser?.username === user?.username) {
-        setIsWonProfile(true);
-      }
+    if (currentUser?.username === username) {
+      setIsWonProfile(true);
+    } else {
+      setIsWonProfile(false);
     }
-
-    getUser();
   }, [userLoading]);
 
-  function handleUnfollow(id: string) {
-    throw new Error("Function not implemented.");
+  // For following
+  const { mutate: followingFN } = useToggleFollowing();
+
+  function handleUnfollow(userId: string) {
+    const toastId = toast.loading("Unfollowing...");
+
+    followingFN(userId, {
+      onSuccess: function (data) {
+        toast.success(data?.message, { id: toastId });
+      },
+      onError: function (err) {
+        toast.error(err?.message || "Failed to unfollowing", {
+          id: toastId,
+        });
+      },
+    });
+  }
+
+  if (userLoading) {
+    return <Loading />;
   }
 
   return (
