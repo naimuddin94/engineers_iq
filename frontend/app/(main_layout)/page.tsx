@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { SearchIcon } from "lucide-react";
 import { useRef, useState } from "react";
 
-import ArticlesView from "@/components/module/home/ArticlesVeiw";
+import ArticlesView from "@/components/module/home/ArticlesView";
 import { SidebarSection } from "@/components/module/home/sidebar_section";
 import SystemPicks from "@/components/module/home/SystemPicks";
 import Container from "@/components/shared/Container";

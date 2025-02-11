@@ -71,6 +71,27 @@ export const fetchArticles = async (params: IFilterOptions) => {
   }
 };
 
+export const fetchAuthorArticles = async (params: IFilterOptions) => {
+  try {
+    // Build query string dynamically
+    const queryParams = new URLSearchParams(
+      Object.entries(params).filter(([_, value]) => value !== undefined),
+    ).toString();
+    const data = await fetchAPI<IResponseWithMetadata<IArticle[]>>(
+      `/articles?${queryParams}`,
+      {
+        next: {
+          tags: ["author-articles"],
+        },
+      },
+    );
+
+    return data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message);
+  }
+};
+
 export const fetchArticle = async (articleId: string) => {
   try {
     const data = await fetchAPI<IResponse<IArticle>>(`/articles/${articleId}`, {

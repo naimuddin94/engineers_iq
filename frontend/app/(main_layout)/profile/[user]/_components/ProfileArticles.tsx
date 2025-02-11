@@ -3,28 +3,37 @@
 
 import { Tab, Tabs } from "@heroui/tabs";
 import { motion } from "framer-motion";
-import { FileX } from "lucide-react";
+import { useEffect } from "react";
 
 import { Analytics } from "./Analytics";
 
+import ArticleNotFound from "@/components/module/home/ArticleNotFound";
 import ProfileArticleCard from "@/components/shared/ProfileArticleCard";
 import CardSkeleton from "@/components/shared/Skeleton";
-import { useGetArticles } from "@/hooks/article.hook";
+import { useGetAuthorArticles } from "@/hooks/article.hook";
 import { IUser } from "@/types";
 
 export default function ProfileArticles({ user }: { user: IUser }) {
-  const { data, isLoading, error } = useGetArticles({ author: user?._id });
+  const { data, isLoading, error, refetch, isRefetching } =
+    useGetAuthorArticles({
+      author: user?._id,
+    });
+
+  useEffect(() => {
+    refetch();
+  }, [user.username]);
 
   return (
     <div className="lg:order-1 lg:col-span-2 order-2">
       <div className="flex w-full flex-col">
         <Tabs aria-label="Options">
           <Tab key="articles" title="Articles">
-            {!error && isLoading ? (
+            {(isLoading || isRefetching) &&
               Array.from({ length: 3 }).map((_, idx) => (
                 <CardSkeleton key={idx} />
-              ))
-            ) : data?.data && data?.data?.length > 0 ? (
+              ))}
+            {data?.data &&
+              data?.data?.length > 0 &&
               data?.data?.map((article, idx) => (
                 <motion.div
                   key={article._id}
@@ -38,16 +47,12 @@ export default function ProfileArticles({ user }: { user: IUser }) {
                 >
                   <ProfileArticleCard article={article} />
                 </motion.div>
-              ))
-            ) : (
-              <div className="min-h-[50vh] flex flex-col justify-center items-center text-center space-y-4">
-                <FileX className="w-16 h-16 text-gray-400" />
-                <h1 className="text-2xl font-semibold text-gray-600">
-                  No articles found!
-                </h1>
-                <p className="text-gray-500">
-                  Try searching for something else or check back later.
-                </p>
+              ))}
+
+            {data?.data?.length === 0 && <ArticleNotFound />}
+            {error && (
+              <div className="flex justify-center items-center h-[50vh]">
+                <h1>Something happened when fetched articles</h1>
               </div>
             )}
           </Tab>

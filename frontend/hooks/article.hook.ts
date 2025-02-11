@@ -51,6 +51,13 @@ export const useGetArticles = (params: IFilterOptions) => {
   });
 };
 
+export const useGetAuthorArticles = (params: IFilterOptions) => {
+  return useQuery({
+    queryKey: ["GET_AUTHOR_ARTICLES"],
+    queryFn: () => fetchArticles(params),
+  });
+};
+
 export const useGetArticle = (articleId: string) => {
   return useQuery({
     queryKey: ["GET_ARTICLE"],

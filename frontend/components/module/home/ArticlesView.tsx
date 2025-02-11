@@ -2,8 +2,9 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { FileX } from "lucide-react";
 import { useEffect } from "react";
+
+import ArticleNotFound from "./ArticleNotFound";
 
 import ArticleCard from "@/components/shared/ArticleCard";
 import CardSkeleton from "@/components/shared/Skeleton";
@@ -48,9 +49,12 @@ export default function ArticlesView({ filterData }: IProps) {
             <h1>Something happened when fetched articles</h1>
           </div>
         )}
-        {(!error && isLoading) || isRefetching ? (
-          Array.from({ length: 3 }).map((_, idx) => <CardSkeleton key={idx} />)
-        ) : data?.data && data?.data?.length > 0 ? (
+        {/* For loading capture in UI */}
+        {isLoading &&
+          Array.from({ length: 3 }).map((_, idx) => <CardSkeleton key={idx} />)}
+
+        {data?.data &&
+          data?.data?.length > 0 &&
           data?.data?.map((article, idx) => (
             <motion.div
               key={article._id}
@@ -64,18 +68,8 @@ export default function ArticlesView({ filterData }: IProps) {
             >
               <ArticleCard article={article} />
             </motion.div>
-          ))
-        ) : (
-          <div className="min-h-[50vh] flex flex-col justify-center items-center text-center space-y-4">
-            <FileX className="w-16 h-16 text-gray-400" />
-            <h1 className="text-2xl font-semibold text-gray-600">
-              No articles found!
-            </h1>
-            <p className="text-gray-500">
-              Try searching for something else or check back later.
-            </p>
-          </div>
-        )}
+          ))}
+        {data?.data?.length === 0 && <ArticleNotFound />}
       </AnimatePresence>
     </>
   );
