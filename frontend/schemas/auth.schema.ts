@@ -9,11 +9,7 @@ const signinSchema = z.object({
   password: z
     .string()
     .nonempty("Password is required")
-    .min(6, "Password must be at least 6 characters long")
-    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .regex(/[0-9]/, "Password must contain at least one number")
-    .regex(/[\W_]/, "Password must contain at least one special character"),
+    .min(6, "Password must be at least 6 characters long"),
 });
 
 const signupSchema = z.object({
@@ -47,7 +43,14 @@ const signupSchema = z.object({
 
 const passwordChangeSchema = z
   .object({
-    oldPassword: z.string().nonempty("Old Password is required"),
+    oldPassword: z
+      .string()
+      .nonempty("Password is required")
+      .min(6, "Password must be at least 6 characters long")
+      .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+      .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+      .regex(/[0-9]/, "Password must contain at least one number")
+      .regex(/[\W_]/, "Password must contain at least one special character"),
 
     newPassword: z
       .string()
@@ -70,12 +73,3 @@ export const AuthValidation = {
   signupSchema,
   passwordChangeSchema,
 };
-
-// image: z.any({ message: "Image is required" }).refine(
-//     (file) => {
-//       return file && file.size <= 500 * 1024;
-//     },
-//     {
-//       message: "Image size must be under 500 KB",
-//     },
-//   ),
