@@ -29,12 +29,11 @@ import { getCurrentUser } from "@/services/AuthService";
 import { IUser } from "@/types";
 
 export default function HandleProfileInfo({ user }: { user: IUser }) {
-  const { user: currentUser } = useUser();
+  const { user: currentUser, isLoading: userLoading } = useUser();
   const [nameChangedAction, setNameChangedAction] = useState(false);
   const [updatedName, setUpdatedName] = useState(user.name);
   const [isAlreadyFollowed, setIsAlreadyFollowed] = useState(false);
   const [isWonProfile, setIsWonProfile] = useState<boolean>(false);
-  const { isLoading: userLoading } = useUser();
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const inputRef = useRef<HTMLInputElement>(null);

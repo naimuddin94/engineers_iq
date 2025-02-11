@@ -41,6 +41,7 @@ export default function Navbar() {
     <Dropdown placement="bottom-start">
       <DropdownTrigger>
         <User
+          key={user?.image}
           as="button"
           avatarProps={{
             isBordered: true,
@@ -66,6 +67,7 @@ export default function Navbar() {
     <Dropdown placement="bottom-end">
       <DropdownTrigger>
         <Avatar
+          key={user?.image}
           isBordered
           as="button"
           className="transition-transform"

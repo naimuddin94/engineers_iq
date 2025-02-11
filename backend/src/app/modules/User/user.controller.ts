@@ -119,6 +119,16 @@ const getAnalytics = asyncHandler(async (req, res) => {
     );
 });
 
+const getUserStatus = asyncHandler(async (req, res) => {
+  const userId = req.params.userId;
+
+  const result = await UserService.getUserFromDB(userId);
+
+  res
+    .status(status.OK)
+    .json(new AppResponse(status.OK, result, 'User info retrieved'));
+});
+
 export const UserController = {
   signup,
   signin,
@@ -129,4 +139,5 @@ export const UserController = {
   getUserInfo,
   toggleFollower,
   getAnalytics,
+  getUserStatus,
 };

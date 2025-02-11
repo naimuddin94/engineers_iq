@@ -69,9 +69,14 @@ export const useChangePassword = () => {
 
 // Change Profile Image Mutation
 export const useChangeProfileImage = () => {
+  const queryClient = useQueryClient();
+
   return useMutation<IResponse<IUser>, Error, FormData>({
     mutationKey: ["CHANGE_PHOTO"],
     mutationFn: async (payload) => await changeProfileImage(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["PROFILE"] });
+    },
   });
 };
 

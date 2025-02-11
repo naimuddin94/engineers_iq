@@ -2,6 +2,7 @@
 "use server";
 
 import { jwtDecode } from "jwt-decode";
+import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { FieldValues } from "react-hook-form";
 
@@ -79,6 +80,10 @@ export const changeFullname = async (name: string) => {
       body: JSON.stringify({ name }),
     });
 
+    if (data?.success) {
+      revalidateTag("profile");
+    }
+
     return data;
   } catch (error: any) {
     throw new Error(error?.response?.data?.message);
@@ -108,6 +113,10 @@ export const changeProfileImage = async (payload: FormData) => {
       body: payload,
     });
 
+    if (data?.success) {
+      revalidateTag("profile");
+    }
+
     return data;
   } catch (error: any) {
     throw new Error(error?.response?.data?.message);
@@ -120,7 +129,7 @@ export const getProfile = async (
   try {
     const data = await fetchAPI<IResponse<IUser>>(`/auth/profile/${username}`, {
       next: {
-        tags: ["PROFILE"],
+        tags: ["profile"],
       },
     });
 
@@ -168,13 +177,17 @@ export const getCurrentUser = async () => {
   if (accessToken) {
     decodedToken = await jwtDecode(accessToken);
 
+    const { data } = await fetchAPI<IResponse<IUser>>(
+      `/auth/user-status/${decodedToken.id}`,
+    );
+
     return {
-      id: decodedToken.id,
-      name: decodedToken.name,
-      username: decodedToken.username,
-      email: decodedToken.email,
-      role: decodedToken.role,
-      image: decodedToken.image,
+      id: data?._id,
+      name: data?.name,
+      username: data?.username,
+      email: data?.email,
+      role: data?.role,
+      image: data?.image,
     };
   }
 

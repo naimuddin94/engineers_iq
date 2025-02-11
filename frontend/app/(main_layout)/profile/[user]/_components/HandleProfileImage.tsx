@@ -15,7 +15,7 @@ import { IUser } from "@/types";
 export default function HandleProfileImage({ user }: { user: IUser }) {
   const [isWonProfile, setIsWonProfile] = useState<boolean>(false);
   const [updateImage, setUpdateImage] = useState(user?.image);
-  const { isLoading: userLoading } = useUser();
+  const { isLoading: userLoading, setUser } = useUser();
 
   // For change profile image
   const { mutate: changeImageFN } = useChangeProfileImage();
@@ -34,6 +34,7 @@ export default function HandleProfileImage({ user }: { user: IUser }) {
     changeImageFN(formData, {
       onSuccess: function (data) {
         setUpdateImage(data?.data?.image);
+        setUser(data?.data);
         toast.success(data?.message, { id: toastId });
       },
       onError: function (err) {
@@ -59,10 +60,12 @@ export default function HandleProfileImage({ user }: { user: IUser }) {
   return (
     <div className="relative group">
       <Avatar
+        key={updateImage || user?.image}
         alt={user?.name}
         className="w-24 h-24 mb-3 mt-4"
-        src={updateImage}
+        src={updateImage || user?.image || ""}
       />
+
       {isWonProfile && (
         <>
           <label

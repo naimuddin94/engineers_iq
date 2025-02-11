@@ -52,4 +52,6 @@ router
 
 router.route('/analytics/:userId').get(UserController.getAnalytics);
 
+router.route('/user-status/:userId').get(UserController.getUserStatus);
+
 export const UserRoutes = router;

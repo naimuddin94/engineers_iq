@@ -349,6 +349,12 @@ const getUserAnalyticsFromDB = async (authorId: string) => {
       };
 };
 
+const getUserFromDB = async (userId: string) => {
+  return await User.findById(userId).select(
+    'name role image email username premium'
+  );
+};
+
 export const UserService = {
   saveUserIntoDB,
   loginUser,
@@ -359,4 +365,5 @@ export const UserService = {
   getProfileInfoIntoDB,
   toggleFollowerIntoDB,
   getUserAnalyticsFromDB,
+  getUserFromDB,
 };
